@@ -38,11 +38,16 @@
     <Compile Include="AssetBundle\Il2CppAssetBundle.cs" />
     <Compile Include="AssetBundle\Il2CppAssetBundleCreateRequest.cs" />
     <Compile Include="AssetBundle\Il2CppAssetBundleManager.cs" />
-    <Compile Include="Patches\AuthPatches\CentralAuthManagerSignPatch.cs" />
+    <Compile Include="Event\EventListener.cs" />
+    <Compile Include="Event\EventManager.cs" />
+    <Compile Include="Event\EventReactor.cs" />
+    <Compile Include="Event\IEvent.cs" />
+    <Compile Include="Meta\Automatic.cs" />
+    <Compile Include="Meta\MetaAnalyzer.cs" />
+    <Compile Include="Patches\Command\CommandHandlerTryGetCommandPatch.cs" />
     <Compile Include="Patches\News\NewsLoaderStartPatch.cs" />
     <Compile Include="Patches\ServerBrowser\NewServerBrowserOnEnablePatch.cs" />
-    <Compile Include="Mod.cs" />
-    <Compile Include="Patches\test.cs" />
+    <Compile Include="AxonMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -51,9 +56,13 @@
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>Refs\Assembly-CSharp.dll</HintPath>
+      <Aliases>global</Aliases>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>Refs\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2CppCommandSystem.Core">
+      <HintPath>Refs\Il2CppCommandSystem.Core.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppInterop.Common">
       <HintPath>Refs\Il2CppInterop.Common.dll</HintPath>
@@ -64,7 +73,8 @@
     <Reference Include="Il2CppInterop.Runtime">
       <HintPath>Refs\Il2CppInterop.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Il2CppMirror">
+    <Reference Include="Il2CppMirror, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>Refs\Il2CppMirror.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppMirror.Components">
@@ -126,6 +136,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Commands\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

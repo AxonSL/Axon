@@ -606,3 +606,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 Axon.Client/Refs
+Axon.Server/Refs
