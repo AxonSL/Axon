@@ -28,18 +28,34 @@ public class AxonMod : MelonMod
         CustomNetworkManager.Modded = true;
         Il2CppCentralAuth.CentralAuthManager.NoAuthStartupArg = "yes?";
 
-        HarmonyInstance.PatchAll();
-
         Instance = this;
-
-        AssetBundleManager = new AssetBundleManager();
-        AssetBundleManager.Init();
-
-        MetaAnalyzer = new MetaAnalyzer();
-        MetaAnalyzer.AnalyzeAssembly(MelonAssembly.Assembly);
-
         EventManager = new EventManager();
+        AssetBundleManager = new AssetBundleManager();
+        MetaAnalyzer = new MetaAnalyzer();
 
+        EventManager.RegisterEvent(OnTestEvent);
+
+        MetaAnalyzer.Init();
+        EventManager.Init();
+        AssetBundleManager.Init();
+        HarmonyInstance.PatchAll();
+        //Analyze should always be called last so that all handlers/events are registered
+        MetaAnalyzer.Analyze();
+
+        OnTestEvent.Raise(new());
         LoggerInstance.Msg("Axon Loaded");
+    }
+
+    public EventReactor<TestEvent> OnTestEvent = new();
+    public class TestEvent : IEvent { }
+}
+
+[Automatic]
+public class Test : EventListener
+{
+    [EventHandler]
+    public void OnMeta(AxonMod.TestEvent ev)
+    {
+        MelonLogger.Msg("Automatic Event Worked!");
     }
 }

@@ -24,7 +24,7 @@ public class EventReactor<T> : IEventReactor where T : IEvent
     {
         lock (this)
         {
-            foreach (var registration in _registrations)
+            foreach (var registration in _registrations.ToList())
             {
                 registration.Handler.Invoke(evt);
             }

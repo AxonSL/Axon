@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Axon.Client.Meta;
+using MelonLoader;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -90,5 +92,18 @@ public class EventManager
     public void RegisterListener(EventListener listener)
     {
         listener.RegisterAll(this);
+    }
+
+    public void Init() => AxonMod.MetaAnalyzer.OnMeta.Subscribe(LoadMeta);
+
+    private void LoadMeta(MetaEvent ev)
+    {
+        MelonLogger.Msg("Analyze " + ev.Type.Name);
+        if (!ev.Is<EventListener>()) return;
+        MelonLogger.Msg("Is EventListener");
+        var listener = ev.CreateAs<EventListener>();
+        MelonLogger.Msg("Created");
+        listener.RegisterAll(this);
+        MelonLogger.Msg("Registered");
     }
 }
