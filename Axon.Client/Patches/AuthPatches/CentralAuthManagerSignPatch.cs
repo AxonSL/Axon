@@ -15,7 +15,7 @@ public class Sign
     public static bool OnCentralAuthManagerSign(ref string __result, string ticket)
     {
         CentralAuthManager.Authenticated = true;
-        __result = "TICKET";
+        __result = "Axon-Ticket";
         return false;
     }
 }
