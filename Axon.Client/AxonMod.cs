@@ -10,18 +10,18 @@ using System.IO;
 using Axon.Client.AssetBundle;
 using Il2Cpp;
 using Axon.Client.Meta;
+using Axon.Client.Event;
 
-[assembly: MelonInfo(typeof(Mod), "Axon", "0.0.1", "Dimenzio & Tiliboyy")]
+[assembly: MelonInfo(typeof(AxonMod), "Axon", "0.0.1", "Dimenzio & Tiliboyy")]
 [assembly: MelonGame("Northwood", "SCPSL")]
 namespace Axon.Client;
 
-public class Mod : MelonMod
+public class AxonMod : MelonMod
 {
-    public static Mod Instance { get; private set; }
-
+    public static AxonMod Instance { get; private set; }
     public static AssetBundleManager AssetBundleManager { get; private set; }
-
     public static MetaAnalyzer MetaAnalyzer { get; private set; }
+    public static EventManager EventManager { get; private set; }
 
     public override void OnInitializeMelon()
     {
@@ -37,6 +37,8 @@ public class Mod : MelonMod
 
         MetaAnalyzer = new MetaAnalyzer();
         MetaAnalyzer.AnalyzeAssembly(MelonAssembly.Assembly);
+
+        EventManager = new EventManager();
 
         LoggerInstance.Msg("Axon Loaded");
     }
