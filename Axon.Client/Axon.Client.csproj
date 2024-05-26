@@ -34,7 +34,11 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AssetBundle\Il2CppAssetBundle.cs" />
+    <Compile Include="AssetBundle\Il2CppAssetBundleCreateRequest.cs" />
+    <Compile Include="AssetBundle\Il2CppAssetBundleManager.cs" />
     <Compile Include="Patches\AuthPatches\CentralAuthManagerSignPatch.cs" />
+    <Compile Include="Patches\News\NewsLoaderStartPatch.cs" />
     <Compile Include="Patches\ServerBrowser\NewServerBrowserOnEnablePatch.cs" />
     <Compile Include="Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
