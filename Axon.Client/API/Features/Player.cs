@@ -19,19 +19,23 @@ public class Player
 
     }
     public readonly static List<Player> List = new List<Player>();
-    public readonly ReferenceHub ReferenceHub;
+    public ReferenceHub ReferenceHub;
 
     public Vector3 Position => ReferenceHub.gameObject.transform.position;
     public Transform Transform => ReferenceHub.gameObject.transform;
 
-    public Camera Camera => ReferenceHub.PlayerCameraReference.gameObject.GetComponent<Camera>();
+
     public Il2CppSystem.Collections.Generic.List<ItemBase> Inventory
     {
         get
         {
             var itemBases = new Il2CppSystem.Collections.Generic.List<ItemBase>();
-            ReferenceHub.inventory.UserInventory.Items.ForEach();   
-        } 
+            foreach (var userInventoryItem in ReferenceHub.inventory.UserInventory.Items)
+            {
+                itemBases.Add(userInventoryItem.Value);
+            }
+            return itemBases;
+        }
     }
 
     public static Dictionary<GameObject, Player> Dictionary = new Dictionary<GameObject, Player>();

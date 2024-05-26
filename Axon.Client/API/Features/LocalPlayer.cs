@@ -3,9 +3,17 @@ using Il2Cpp;
 using UnityEngine;
 
 namespace Axon.Client.API.Features;
-public class LocalPlayer
+
+public class LocalPlayer : Player
 {
-    public static Il2Cpp.ReferenceHub ReferenceHub => ReferenceHub.LocalHub;
-    public static Dictionary<GameObject, Player> Dictionary = new Dictionary<GameObject, Player>();
-    public Transform Transform => ReferenceHub.gameObject.transform;
+    private static LocalPlayer _instance = new LocalPlayer();
+    public static LocalPlayer Get()
+    {
+        return _instance;
+    }
+    public LocalPlayer()
+    {
+        ReferenceHub = ReferenceHub.LocalHub;
+    }
+    public Camera Camera => ReferenceHub.PlayerCameraReference.gameObject.GetComponent<Camera>();
 }

@@ -34,6 +34,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="API\Features\LocalPlayer.cs" />
+    <Compile Include="API\Features\Player.cs" />
     <Compile Include="AssetBundle\AssetBundleManager.cs" />
     <Compile Include="AssetBundle\Il2CppAssetBundle.cs" />
     <Compile Include="AssetBundle\Il2CppAssetBundleCreateRequest.cs" />
@@ -135,7 +137,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\" />

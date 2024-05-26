@@ -87,7 +87,7 @@ public class EventManager
     /// Registers an event listener.
     /// </summary>
     /// <param name="listener">the listener which shall be subscribed</param>
-    public void RegisterListener(Listener listener)
+    public void RegisterListener(EventListener listener)
     {
         listener.RegisterAll(this);
     }
