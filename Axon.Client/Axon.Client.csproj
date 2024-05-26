@@ -44,6 +44,7 @@
     <Compile Include="Event\IEvent.cs" />
     <Compile Include="Meta\Automatic.cs" />
     <Compile Include="Meta\MetaAnalyzer.cs" />
+    <Compile Include="Meta\MetaEvent.cs" />
     <Compile Include="Patches\Command\CommandHandlerTryGetCommandPatch.cs" />
     <Compile Include="Patches\News\NewsLoaderStartPatch.cs" />
     <Compile Include="Patches\ServerBrowser\NewServerBrowserOnEnablePatch.cs" />

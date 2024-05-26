@@ -11,6 +11,8 @@ public class AssetBundleManager
 {
     private bool _initiated = false;
 
+    internal AssetBundleManager() { }
+
     public const string AssetDirectoryName = "AssetBundles";
     public string AssetDirectory { get; private set; }
     public Dictionary<string, Il2CppAssetBundle> AssetBundles { get; private set; } = new();

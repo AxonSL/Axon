@@ -1,4 +1,5 @@
-﻿using Il2CppCommandSystem;
+﻿using Axon.Client.Event;
+using Il2CppCommandSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,21 @@ namespace Axon.Client.Meta;
 
 public class MetaAnalyzer
 {
+    public EventReactor<MetaEvent> OnMeta = new EventReactor<MetaEvent>();
+
+    internal MetaAnalyzer() { }
+
+    public void Init()
+    {
+        AxonMod.EventManager.RegisterEvent(OnMeta);
+    }
+
+    public void Analyze()
+    {
+        var assembly = Assembly.GetCallingAssembly();
+        AnalyzeAssembly(assembly);
+    }
+
     public void AnalyzeAssembly(Assembly assembly)
     {
         foreach (var type in assembly.GetTypes())
@@ -20,7 +36,8 @@ public class MetaAnalyzer
 
     public void AnalyzeType(Type type)
     {
-        //write later with event system
         if (type.GetCustomAttribute<Automatic>() == null) return;
+        var ev = new MetaEvent(type);
+        OnMeta.Raise(ev);
     }
 }
