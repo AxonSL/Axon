@@ -9,13 +9,9 @@ using MelonLoader;
 
 namespace Axon.Client.Patches.Command;
 
-//[HarmonyPatch(typeof(CommandHandler),nameof(CommandHandler.TryGetCommand))]
+[HarmonyPatch(typeof(Il2CppGameCore.Console),nameof(Il2CppGameCore.Console.TypeCommand))]
 public class CommandHandlerTryGetCommandPatch
 {
     [HarmonyPrefix]
-    public static bool OnTryGetCommand(string query)
-    {
-        MelonLogger.Msg("Command: " + query);
-        return true;
-    }
+    public static bool OnTryGetCommand(string cmd) => AxonMod.CommandHandler.OnCommand(cmd);
 }

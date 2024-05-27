@@ -51,7 +51,7 @@ public class AxonPlugin : Plugin<AxonConfig>
 
     private void WaitingForPlayers()
     {
-        
+
     }
 
     private void RoundStart()
@@ -75,6 +75,22 @@ public class AxonPlugin : Plugin<AxonConfig>
 
     private void Door(InteractingDoorEventArgs ev)
     {
+        var writer = new NetworkWriter();
+
+        //AssetBundle Name
+        writer.WriteString("v1");
+        //Prefab Name
+        writer.WriteString("Assets/v1.prefab");
+        //Gameobject Name
+        writer.WriteString("AxonAsset");
+
+        var payload = writer.ToArraySegment();
+        foreach(var b in payload)
+        {
+            Log.Info(b);
+        }
+
+
         var msg = new SpawnMessage()
         {
             sceneId = 34324,
@@ -82,6 +98,7 @@ public class AxonPlugin : Plugin<AxonConfig>
             rotation = ev.Player.Rotation,
             scale = Vector3.one,
             netId = 1,
+            payload = payload
         };
         ev.Player.Connection.Send(msg);
     }

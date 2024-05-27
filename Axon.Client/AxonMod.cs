@@ -11,6 +11,7 @@ using Axon.Client.AssetBundle;
 using Il2Cpp;
 using Axon.Client.Meta;
 using Axon.Client.Event;
+using Axon.Client.Command;
 
 [assembly: MelonInfo(typeof(AxonMod), "Axon", "0.0.1", "Dimenzio & Tiliboyy")]
 [assembly: MelonGame("Northwood", "SCPSL")]
@@ -23,6 +24,7 @@ public class AxonMod : MelonMod
     public static AssetBundleHandler AssetBundleHandler { get; private set; }
     public static MetaAnalyzer MetaAnalyzer { get; private set; }
     public static EventManager EventManager { get; private set; }
+    public static CommandHandler CommandHandler { get; private set; }
 
     public override void OnInitializeMelon()
     {
@@ -34,6 +36,7 @@ public class AxonMod : MelonMod
         AssetBundleManager = new AssetBundleManager();
         AssetBundleHandler = new AssetBundleHandler();
         MetaAnalyzer = new MetaAnalyzer();
+        CommandHandler = new CommandHandler();
 
         MetaAnalyzer.Init();
         EventManager.Init();

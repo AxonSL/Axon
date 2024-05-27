@@ -41,6 +41,7 @@
     <Compile Include="AssetBundle\Il2CppAssetBundle.cs" />
     <Compile Include="AssetBundle\Il2CppAssetBundleCreateRequest.cs" />
     <Compile Include="AssetBundle\Il2CppAssetBundleManager.cs" />
+    <Compile Include="Command\CommandHandler.cs" />
     <Compile Include="Event\EventListener.cs" />
     <Compile Include="Event\EventManager.cs" />
     <Compile Include="Event\EventReactor.cs" />
