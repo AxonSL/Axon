@@ -9,7 +9,7 @@ using MelonLoader;
 
 namespace Axon.Client.Patches.Command;
 
-[HarmonyPatch(typeof(CommandHandler),nameof(CommandHandler.TryGetCommand))]
+//[HarmonyPatch(typeof(CommandHandler),nameof(CommandHandler.TryGetCommand))]
 public class CommandHandlerTryGetCommandPatch
 {
     [HarmonyPrefix]

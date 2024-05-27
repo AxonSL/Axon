@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="API\Features\LocalPlayer.cs" />
     <Compile Include="API\Features\Player.cs" />
+    <Compile Include="AssetBundle\AssetBundleHandler.cs" />
     <Compile Include="AssetBundle\AssetBundleManager.cs" />
     <Compile Include="AssetBundle\Il2CppAssetBundle.cs" />
     <Compile Include="AssetBundle\Il2CppAssetBundleCreateRequest.cs" />
@@ -48,6 +49,7 @@
     <Compile Include="Meta\MetaAnalyzer.cs" />
     <Compile Include="Meta\MetaEvent.cs" />
     <Compile Include="Patches\Command\CommandHandlerTryGetCommandPatch.cs" />
+    <Compile Include="Patches\Mirror\NetworkClientOnHostClientSpawnPatch.cs" />
     <Compile Include="Patches\News\NewsLoaderStartPatch.cs" />
     <Compile Include="Patches\ServerBrowser\NewServerBrowserOnEnablePatch.cs" />
     <Compile Include="AxonMod.cs" />

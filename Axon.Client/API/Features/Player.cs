@@ -5,6 +5,7 @@ using Il2CppUtils.NonAllocLINQ;
 using UnityEngine;
 
 namespace Axon.Client.API.Features;
+
 public class Player
 {
 
