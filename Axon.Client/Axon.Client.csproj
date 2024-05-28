@@ -36,11 +36,12 @@
   <ItemGroup>
     <Compile Include="API\Features\LocalPlayer.cs" />
     <Compile Include="API\Features\Player.cs" />
-    <Compile Include="AssetBundle\AssetBundleHandler.cs" />
+    <Compile Include="AssetBundle\AssetBundleSpawner.cs" />
     <Compile Include="AssetBundle\AssetBundleManager.cs" />
     <Compile Include="AssetBundle\Il2CppAssetBundle.cs" />
     <Compile Include="AssetBundle\Il2CppAssetBundleCreateRequest.cs" />
     <Compile Include="AssetBundle\Il2CppAssetBundleManager.cs" />
+    <Compile Include="Command\AxonCommandAttribute.cs" />
     <Compile Include="Command\CommandHandler.cs" />
     <Compile Include="Event\EventListener.cs" />
     <Compile Include="Event\EventManager.cs" />

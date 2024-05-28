@@ -7,17 +7,15 @@ using System.Threading.Tasks;
 
 namespace Axon.Client.AssetBundle;
 
-public class AssetBundleManager
+public static class AssetBundleManager
 {
-    private bool _initiated = false;
-
-    internal AssetBundleManager() { }
+    private static bool _initiated = false;
 
     public const string AssetDirectoryName = "AssetBundles";
-    public string AssetDirectory { get; private set; }
-    public Dictionary<string, Il2CppAssetBundle> AssetBundles { get; private set; } = new();
+    public static string AssetDirectory { get; private set; }
+    public static Dictionary<string, Il2CppAssetBundle> AssetBundles { get; private set; } = new();
 
-    public void Init()
+    internal static void Init()
     {
         if(_initiated) return;
 
@@ -30,7 +28,7 @@ public class AssetBundleManager
         _initiated = true;
     }
 
-    private void LoadAssets()
+    private static void LoadAssets()
     {
         foreach(var assetPath in Directory.GetFiles(AssetDirectory))
         {

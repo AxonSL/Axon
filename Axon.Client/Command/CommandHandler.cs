@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Axon.Client.Command;
 
-public class CommandHandler
+public static class CommandHandler
 {
-    public bool OnCommand(string command)
+    public static bool OnCommand(string command)
     {
         MelonLogger.Msg("Command: " + command);
         return true;

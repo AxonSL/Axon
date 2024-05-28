@@ -17,7 +17,7 @@ public static class NetworkClientOnHostClientSpawnPatch
     [HarmonyPrefix]
     public static bool OnSpawnMessage(SpawnMessage message)
     {
-        if (message.sceneId != AssetBundleHandler.AssetBundleMirrorId) return true;
+        if (message.sceneId != AssetBundleSpawner.AssetBundleMirrorId) return true;
         AxonMod.AssetBundleHandler.OnSpawnMessage(message);
         return false;
     }

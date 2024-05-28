@@ -20,11 +20,7 @@ namespace Axon.Client;
 public class AxonMod : MelonMod
 {
     public static AxonMod Instance { get; private set; }
-    public static AssetBundleManager AssetBundleManager { get; private set; }
-    public static AssetBundleHandler AssetBundleHandler { get; private set; }
-    public static MetaAnalyzer MetaAnalyzer { get; private set; }
     public static EventManager EventManager { get; private set; }
-    public static CommandHandler CommandHandler { get; private set; }
 
     public override void OnInitializeMelon()
     {
@@ -33,10 +29,6 @@ public class AxonMod : MelonMod
 
         Instance = this;
         EventManager = new EventManager();
-        AssetBundleManager = new AssetBundleManager();
-        AssetBundleHandler = new AssetBundleHandler();
-        MetaAnalyzer = new MetaAnalyzer();
-        CommandHandler = new CommandHandler();
 
         MetaAnalyzer.Init();
         EventManager.Init();

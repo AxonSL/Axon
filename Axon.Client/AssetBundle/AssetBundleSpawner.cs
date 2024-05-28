@@ -12,13 +12,13 @@ using UnityEngine;
 
 namespace Axon.Client.AssetBundle;
 
-public class AssetBundleHandler
+public static class AssetBundleSpawner
 {
     public const uint AssetBundleMirrorId = 34324;
 
-    public ReadOnlyDictionary<uint, GameObject> LoadedAssets { get; private set; } = new (new Dictionary<uint, GameObject>());   
+    public static ReadOnlyDictionary<uint, GameObject> LoadedAssets { get; private set; } = new (new Dictionary<uint, GameObject>());   
 
-    internal void OnSpawnMessage(SpawnMessage message)
+    internal static void OnSpawnMessage(SpawnMessage message)
     {
         try
         {
@@ -41,7 +41,7 @@ public class AssetBundleHandler
         }
     }
 
-    private void CreateAsset(SpawnMessage message)
+    private static void CreateAsset(SpawnMessage message)
     {
         MelonLogger.Msg("Loading Asset! " + message.netId);
         /*
@@ -73,7 +73,7 @@ public class AssetBundleHandler
         */
     }
 
-    private void UpdateAsset(GameObject asset, SpawnMessage message)
+    private static void UpdateAsset(GameObject asset, SpawnMessage message)
     {
         var transform = asset.transform;
         transform.position = message.position;
