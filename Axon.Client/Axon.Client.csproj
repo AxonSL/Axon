@@ -42,7 +42,12 @@
     <Compile Include="AssetBundle\Il2CppAssetBundleCreateRequest.cs" />
     <Compile Include="AssetBundle\Il2CppAssetBundleManager.cs" />
     <Compile Include="Command\AxonCommandAttribute.cs" />
+    <Compile Include="Command\AxonCommands\AxonCommand.cs" />
+    <Compile Include="Command\CommandContext.cs" />
     <Compile Include="Command\CommandHandler.cs" />
+    <Compile Include="Command\CommandResult.cs" />
+    <Compile Include="Command\CommandStatusCode.cs" />
+    <Compile Include="Command\IAxonCommand.cs" />
     <Compile Include="Event\EventListener.cs" />
     <Compile Include="Event\EventManager.cs" />
     <Compile Include="Event\EventReactor.cs" />

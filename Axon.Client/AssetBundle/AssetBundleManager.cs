@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ public static class AssetBundleManager
 
     public const string AssetDirectoryName = "AssetBundles";
     public static string AssetDirectory { get; private set; }
-    public static Dictionary<string, Il2CppAssetBundle> AssetBundles { get; private set; } = new();
+    public static ReadOnlyDictionary<string, Il2CppAssetBundle> AssetBundles { get; private set; } = new(new Dictionary<string, Il2CppAssetBundle>());
 
     internal static void Init()
     {
@@ -34,7 +35,9 @@ public static class AssetBundleManager
         {
             var asset = Il2CppAssetBundleManager.LoadFromFile(assetPath);
             var fileName = Path.GetFileNameWithoutExtension(assetPath);
-            AssetBundles.Add(fileName, asset);
+            var dic = new Dictionary<string, Il2CppAssetBundle>(AssetBundles);
+            dic[fileName] = asset;
+            AssetBundles = new(dic);
         }
     }
 }

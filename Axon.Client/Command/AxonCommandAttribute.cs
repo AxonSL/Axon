@@ -9,4 +9,7 @@ namespace Axon.Client.Command;
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 public class AxonCommandAttribute : Attribute
 {
+    public string Name {  get; set; }
+    public string[] Aliase {  get; set; }
+    public string Description { get; set; }
 }

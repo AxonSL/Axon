@@ -94,7 +94,7 @@ public class EventManager
         listener.RegisterAll(this);
     }
 
-    public void Init() => AxonMod.MetaAnalyzer.OnMeta.Subscribe(LoadMeta);
+    public void Init() => MetaAnalyzer.OnMeta.Subscribe(LoadMeta);
 
     private void LoadMeta(MetaEvent ev)
     {
