@@ -4,14 +4,15 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using MEC;
 using UnityEngine;
 
 namespace Axon.Server;
 
 public class AxonPlugin : Plugin<AxonConfig>
 {
-    public const uint AssetBundleMirrorId = 34324;
-
     public override string Author => "Axon";
     public override string Name => "Axon server plugin";
     public override PluginPriority Priority => PluginPriority.Higher;
@@ -21,9 +22,9 @@ public class AxonPlugin : Plugin<AxonConfig>
 
     public override void OnEnabled()
     {
+        Instance = this;
         MessageHandler.Init();
         HookEvents();
-        Log.Info("Axon Server plugin loaded!");
         base.OnEnabled();
     }
 
@@ -31,24 +32,24 @@ public class AxonPlugin : Plugin<AxonConfig>
     {
         UnHookEvents();
         base.OnDisabled();
+ 
     }
 
     private void HookEvents()
     {
-        Exiled.Events.Handlers.Server.RoundStarted += RoundStart;
-        Exiled.Events.Handlers.Player.InteractingDoor += Door;   
+        Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
+        Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;   
     }
 
     private void UnHookEvents()
     {
-        Exiled.Events.Handlers.Server.RoundStarted -= RoundStart;
-        Exiled.Events.Handlers.Player.InteractingDoor -= Door;
+        Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
+        Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
     }
 
-    private void RoundStart()
+    private void OnRoundStart()
     {
         Log.Info("StartRound");
-
         foreach (var player in ReferenceHub.AllHubs)
         {
             if (player.IsHost) continue;
@@ -67,27 +68,55 @@ public class AxonPlugin : Plugin<AxonConfig>
                 bundleName = "v1",
                 assetName = "Assets/v1.prefab",
                 gameObjectName = "Axon Asset",
-                position = player.transform.position,
-                rotation = player.transform.rotation,
+                position = currentPosition,
+                rotation = Quaternion.Euler(currentRotation),
                 scale = Vector3.one,
             };
+            
             player.connectionToClient.Send(msg);
+            Timing.RunCoroutine(V1Spin());
             Log.Info("Send spawnmessage to " + player.nicknameSync.Network_myNickSync);
         }
     }
+    private Vector3 currentPosition = Vector3.zero;
 
-    private void Door(InteractingDoorEventArgs ev)
+    private Vector3 currentRotation = Vector3.zero;
+    private void OnInteractingDoor(InteractingDoorEventArgs ev)
     {
-        var msg = new SpawnAssetMessage()
-        {
-            objectId = 1,
-            bundleName = "v1",
-            assetName = "Assets/v1.prefab",
-            gameObjectName = "Axon Asset",
-            position = ev.Player.Position,
-            rotation = ev.Player.Rotation,
-            scale = Vector3.one,
-        };
-        ev.Player.Connection.Send(msg);
+        currentPosition = ev.Player.Transform.position;
     }
+    private IEnumerator<float> V1Spin()
+    {
+
+        for (;;)
+        {
+            try
+            {
+                currentRotation.y += 2;
+
+                var msg = new SpawnAssetMessage()
+                {
+                    objectId = 1,
+                    bundleName = "v1",
+                    assetName = "Assets/v1.prefab",
+                    gameObjectName = "Axon Asset",
+                    position = currentPosition,
+                    rotation = Quaternion.Euler(currentRotation),
+                    scale = Vector3.one*0.5f,
+                };
+
+                foreach (var player in ReferenceHub.AllHubs.Where(player => !player.IsHost))
+                {
+                    player.connectionToClient.Send(msg);
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+                throw;
+            }
+            yield return Timing.WaitForOneFrame;
+
+        }
+    } 
 }

@@ -20,6 +20,12 @@ public static class AssetBundleSpawner
             }
             if (LoadedAssets.ContainsKey(message.objectId))
             {
+                //Todo: Do this better
+                if (LoadedAssets[message.objectId] == null)
+                {
+                    CreateAsset(message);
+                    return;
+                }
                 UpdateAsset(LoadedAssets[message.objectId], message);
                 return;
             }
