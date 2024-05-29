@@ -17,8 +17,16 @@ public static class NetworkClientOnHostClientSpawnPatch
     [HarmonyPrefix]
     public static bool OnSpawnMessage(SpawnMessage message)
     {
-        if (message.sceneId != AssetBundleSpawner.AssetBundleMirrorId) return true;
-        AssetBundleSpawner.OnSpawnMessage(message);
-        return false;
+        try
+        {
+            if (message.sceneId != AssetBundleSpawner.AssetBundleMirrorId) return true;
+            AssetBundleSpawner.OnSpawnMessage(message);
+            return false;
+        }
+        catch(Exception e)
+        {
+            MelonLogger.Msg("Patch.Il2cppMirror.NetworkClient.OnSpawn: " + e);
+            return true;
+        }
     }
 }

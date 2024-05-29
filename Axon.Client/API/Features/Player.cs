@@ -8,7 +8,6 @@ namespace Axon.Client.API.Features;
 
 public class Player
 {
-
     public Player(GameObject gameObject)
     {
         ReferenceHub = ReferenceHub.GetHub(gameObject);
@@ -43,12 +42,11 @@ public class Player
 
     public static Player Get(GameObject gameObject)
     {
-        if (gameObject == (Object) null)
+        if (gameObject == null)
             return null;
         Player player;
         if (Player.Dictionary.TryGetValue(gameObject, out player))
             return player;
         return player;
     }
-
 }

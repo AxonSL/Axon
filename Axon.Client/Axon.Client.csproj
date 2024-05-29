@@ -1,74 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{583C0956-F39C-4A3C-AFF4-4427C4CA3482}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Axon.Client</RootNamespace>
-    <AssemblyName>Axon.Client</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Compile Include="API\Features\LocalPlayer.cs" />
-    <Compile Include="API\Features\Player.cs" />
-    <Compile Include="AssetBundle\AssetBundleSpawner.cs" />
-    <Compile Include="AssetBundle\AssetBundleManager.cs" />
-    <Compile Include="AssetBundle\Il2CppAssetBundle.cs" />
-    <Compile Include="AssetBundle\Il2CppAssetBundleCreateRequest.cs" />
-    <Compile Include="AssetBundle\Il2CppAssetBundleManager.cs" />
-    <Compile Include="Command\AxonCommandAttribute.cs" />
-    <Compile Include="Command\AxonCommands\AxonCommand.cs" />
-    <Compile Include="Command\CommandContext.cs" />
-    <Compile Include="Command\CommandHandler.cs" />
-    <Compile Include="Command\CommandResult.cs" />
-    <Compile Include="Command\CommandStatusCode.cs" />
-    <Compile Include="Command\IAxonCommand.cs" />
-    <Compile Include="Event\EventListener.cs" />
-    <Compile Include="Event\EventManager.cs" />
-    <Compile Include="Event\EventReactor.cs" />
-    <Compile Include="Event\IEvent.cs" />
-    <Compile Include="Meta\Automatic.cs" />
-    <Compile Include="Meta\MetaAnalyzer.cs" />
-    <Compile Include="Meta\MetaEvent.cs" />
-    <Compile Include="Patches\Command\CommandHandlerTryGetCommandPatch.cs" />
-    <Compile Include="Patches\Mirror\NetworkClientOnHostClientSpawnPatch.cs" />
-    <Compile Include="Patches\News\NewsLoaderStartPatch.cs" />
-    <Compile Include="Patches\ServerBrowser\NewServerBrowserOnEnablePatch.cs" />
-    <Compile Include="AxonMod.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <PackageReference Include="HarmonyX" Version="2.12.0" />
+    <PackageReference Include="LavaGang.MelonLoader" Version="0.6.1" />
   </ItemGroup>
+
   <ItemGroup>
-    <Reference Include="0Harmony, Version=2.12.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\HarmonyX.2.12.0\lib\net45\0Harmony.dll</HintPath>
-    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>Refs\Assembly-CSharp.dll</HintPath>
-      <Aliases>global</Aliases>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>Refs\Assembly-CSharp-firstpass.dll</HintPath>
@@ -85,8 +30,7 @@
     <Reference Include="Il2CppInterop.Runtime">
       <HintPath>Refs\Il2CppInterop.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Il2CppMirror, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Il2CppMirror">
       <HintPath>Refs\Il2CppMirror.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppMirror.Components">
@@ -98,43 +42,6 @@
     <Reference Include="Il2CppNorthwoodLib">
       <HintPath>Refs\Il2CppNorthwoodLib.dll</HintPath>
     </Reference>
-    <Reference Include="MelonLoader, Version=0.6.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\LavaGang.MelonLoader.0.6.1\lib\net35\MelonLoader.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil, Version=0.11.5.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.11.5\lib\net40\Mono.Cecil.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Mdb, Version=0.11.5.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.11.5\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Pdb, Version=0.11.5.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.11.5\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Rocks, Version=0.11.5.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.11.5\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoMod.Backports, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoMod.Backports.1.1.0\lib\net452\MonoMod.Backports.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoMod.Core, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoMod.Core.1.1.0\lib\net452\MonoMod.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoMod.Iced, Version=1.17.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoMod.Core.1.1.0\lib\net452\MonoMod.Iced.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoMod.ILHelpers, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoMod.ILHelpers.1.0.1\lib\net452\MonoMod.ILHelpers.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoMod.RuntimeDetour, Version=25.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoMod.RuntimeDetour.25.1.0\lib\net452\MonoMod.RuntimeDetour.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoMod.Utils, Version=25.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoMod.Utils.25.0.4\lib\net452\MonoMod.Utils.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>Refs\UnityEngine.dll</HintPath>
     </Reference>
@@ -145,8 +52,5 @@
       <HintPath>Refs\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>

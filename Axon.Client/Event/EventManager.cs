@@ -98,12 +98,8 @@ public class EventManager
 
     private void LoadMeta(MetaEvent ev)
     {
-        MelonLogger.Msg("Analyze " + ev.Type.Name);
         if (!ev.Is<EventListener>()) return;
-        MelonLogger.Msg("Is EventListener");
         var listener = ev.CreateAs<EventListener>();
-        MelonLogger.Msg("Created");
         listener.RegisterAll(this);
-        MelonLogger.Msg("Registered");
     }
 }

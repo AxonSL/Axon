@@ -15,10 +15,18 @@ public class NewServerBrowserOnEnablePatch
     [HarmonyPrefix]
     public static bool OnServerListEnable(NewServerBrowser __instance)
     {
-        MelonLogger.Msg("ServerList Enable!");
-        var filter = __instance.GetComponent<ServerFilter>();
-        var gameObject = UnityEngine.GameObject.Find("New Main Menu/Servers/Auth Status");
-        gameObject.SetActive(false);
-        return true;
+        try
+        {
+            MelonLogger.Msg("ServerList Enable!");
+            var filter = __instance.GetComponent<ServerFilter>();
+            var gameObject = UnityEngine.GameObject.Find("New Main Menu/Servers/Auth Status");
+            gameObject.SetActive(false);
+            return true;
+        }
+        catch(Exception e)
+        {
+            MelonLogger.Msg("Patch.Il2cpp.NewServerBrowser.OnEnable: " + e);
+            return true;
+        }
     }
 }

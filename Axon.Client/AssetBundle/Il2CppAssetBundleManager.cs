@@ -1,6 +1,7 @@
 ﻿using Il2CppSystem.IO;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Stream = Il2CppSystem.IO.Stream;
 
 namespace Axon.Client.AssetBundle;
 
