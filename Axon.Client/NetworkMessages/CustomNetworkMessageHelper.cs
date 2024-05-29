@@ -1,4 +1,5 @@
 ﻿using Il2CppMirror;
+using MelonLoader;
 
 namespace Axon.Client.NetworkMessages;
 
@@ -18,8 +19,15 @@ public abstract class CustomNetworkMessageHelper<T> : ICustomNetworkMessageHelpe
 
     public void OnMessageReceived(NetworkConnection conn, NetworkReader reader, int channelId)
     {
-        var message = Read(reader);
-        OnMessage(message);
+        try
+        {
+            var message = Read(reader);
+            OnMessage(message);
+        }
+        catch (Exception e)
+        {
+            MelonLogger.Error("Receiving " + typeof(T).Name + " failed: ", e);
+        }
     }
 }
 

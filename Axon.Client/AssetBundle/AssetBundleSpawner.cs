@@ -1,35 +1,26 @@
-﻿using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using Il2CppMirror;
-using MelonLoader;
-using MonoMod.Utils;
-using System;
-using System.Collections.Generic;
+﻿using MelonLoader;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
+using Axon.NetworkMessages;
 
 namespace Axon.Client.AssetBundle;
 
 public static class AssetBundleSpawner
 {
-    public const uint AssetBundleMirrorId = 34324;
-
     public static ReadOnlyDictionary<uint, GameObject> LoadedAssets { get; private set; } = new (new Dictionary<uint, GameObject>());   
 
-    internal static void OnSpawnMessage(SpawnMessage message)
+    internal static void OnSpawnAssetMessage(SpawnAssetMessage message)
     {
         try
         {
-            if (message.netId == 0)
+            if (message.objectId == 0)
             {
                 MelonLogger.Error("Server tried to spawn a Asset without a proper NetId. Object can't be spawned");
                 return;
             }
-            if (LoadedAssets.ContainsKey(message.netId))
+            if (LoadedAssets.ContainsKey(message.objectId))
             {
-                UpdateAsset(LoadedAssets[message.netId], message);
+                UpdateAsset(LoadedAssets[message.objectId], message);
                 return;
             }
 
@@ -41,39 +32,30 @@ public static class AssetBundleSpawner
         }
     }
 
-    private static void CreateAsset(SpawnMessage message)
+    private static void CreateAsset(SpawnAssetMessage message)
     {
-        MelonLogger.Msg("Loading Asset! " + message.netId);
-        /*
-        var reader = new NetworkReader();
-        MelonLogger.Msg("Created Reader " + (reader == null));
-        MelonLogger.Msg(message.payload == null);
-        var bundleName = reader.ReadString();
-        var assetName = reader.ReadString();
-        var name = reader.ReadString();
-        MelonLogger.Msg("Read Data");
+        MelonLogger.Msg("Loading Asset! " + message.objectId);
 
-        if (!AxonMod.AssetBundleManager.AssetBundles.TryGetValue(bundleName,out var bundle))
+        if (!AssetBundleManager.AssetBundles.TryGetValue(message.bundleName, out var bundle)) 
         {
             MelonLogger.Error("Server tried to spawn a Asset from an not installed bundle");
             return;
         }
 
-        var asset = AxonMod.AssetBundleManager.AssetBundles.First().Value.LoadAsset<GameObject>(assetName);
+        var asset = bundle.LoadAsset<GameObject>(message.assetName);
         var obj = GameObject.Instantiate(asset);
-        obj.name = name;
+        obj.name = message.assetName;
         obj.transform.position = message.position;
         obj.transform.rotation = message.rotation;
         obj.transform.localScale = message.scale;
 
 
         var dic = new Dictionary<uint, GameObject>(LoadedAssets);
-        dic[message.netId] = obj;
+        dic[message.objectId] = obj;
         LoadedAssets = new(dic);
-        */
     }
 
-    private static void UpdateAsset(GameObject asset, SpawnMessage message)
+    private static void UpdateAsset(GameObject asset, SpawnAssetMessage message)
     {
         var transform = asset.transform;
         transform.position = message.position;
