@@ -97,6 +97,7 @@
     <Compile Include="AxonConfig.cs" />
     <Compile Include="AxonPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,7 +1,13 @@
-﻿using Il2CppInterop.Runtime.Injection;
+﻿using Axon.Client.NetworkMessages;
+using Il2CppInterop.Runtime.Injection;
+using Il2CppMirror;
+using MelonLoader;
+using Axon.Client.Meta;
 
 namespace Axon.NetworkMessages;
 
+[Automatic]
+[CustomNetworkMessage(MessageHelper = typeof(TestMessageHelper))]
 public class TestMessage : Il2CppSystem.Object //NetworkMessage
 {
     public TestMessage(IntPtr ptr) : base(ptr) { }
@@ -11,7 +17,27 @@ public class TestMessage : Il2CppSystem.Object //NetworkMessage
     {
         ClassInjector.DerivedConstructorBody(this);
     }
-    
 
     public string message;
+}
+
+public class TestMessageHelper : CustomNetworkMessageHelper<TestMessage>
+{
+    public override void OnMessage(TestMessage message)
+    {
+        MelonLogger.Msg("Got Testmessage: " + message.message);
+    }
+
+    public override TestMessage Read(NetworkReader reader)
+    {
+        return new TestMessage()
+        {
+            message = reader.ReadString(),
+        };
+    }
+
+    public override void Write(NetworkWriter writer, TestMessage message)
+    {
+        writer.WriteString(message.message);
+    }
 }

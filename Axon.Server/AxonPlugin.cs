@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using Axon.NetworkMessages;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Mirror;
@@ -27,6 +28,35 @@ public class AxonPlugin : Plugin<AxonConfig>
         HookEvents();
         Log.Info("Axon Server plugin loaded!");
         base.OnEnabled();
+
+        Writer<TestMessage>.write = WriteTest;
+        Reader<TestMessage>.read = ReadTest;
+        NetworkClient.RegisterHandler<TestMessage>(OnTestMessage);
+        NetworkServer.RegisterHandler<TestMessage>(OnTestMessageServer);
+        Log.Info("TestMessage ID: " + NetworkMessageId<TestMessage>.Id);
+    }
+
+    private void WriteTest(NetworkWriter writer, TestMessage message)
+    {
+        writer.WriteString(message.message);
+    }
+
+    private TestMessage ReadTest(NetworkReader reader)
+    {
+        return new()
+        {
+            message = reader.ReadString(),
+        };
+    }
+
+    private void OnTestMessage(TestMessage message)
+    {
+        Log.Info("Got Testmessage: " + message);
+    }
+
+    private void OnTestMessageServer(NetworkConnection connection, TestMessage message)
+    {
+        Log.Info("Got Testmessage(Server): " + message);
     }
 
     public override void OnDisabled()
@@ -61,6 +91,14 @@ public class AxonPlugin : Plugin<AxonConfig>
         foreach (var player in ReferenceHub.AllHubs)
         {
             if (player.IsHost) continue;
+            var msgTest = new TestMessage()
+            {
+                message = "Send from Server :D"
+            };
+            player.connectionToClient.Send(msgTest);
+
+
+
             Log.Info(player.nicknameSync.Network_myNickSync);
             var msg = new SpawnMessage()
             {
