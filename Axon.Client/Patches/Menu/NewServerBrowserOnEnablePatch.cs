@@ -7,7 +7,7 @@ using HarmonyLib;
 using Il2Cpp;
 using MelonLoader;
 
-namespace Axon.Client.Patches.ServerBrowser;
+namespace Axon.Client.Patches.Menu;
 
 [HarmonyPatch(typeof(NewServerBrowser), nameof(NewServerBrowser.OnEnable))]
 public class NewServerBrowserOnEnablePatch
@@ -23,7 +23,7 @@ public class NewServerBrowserOnEnablePatch
             gameObject.SetActive(false);
             return true;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             MelonLogger.Msg("Patch.Il2cpp.NewServerBrowser.OnEnable: " + e);
             return true;

@@ -44,6 +44,8 @@
     </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>refs\Unity.TextMeshPro.dll</HintPath>
+    <Reference Include="Il2CppSystem.Core">
+      <HintPath>Refs\Il2CppSystem.Core.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>Refs\UnityEngine.dll</HintPath>
@@ -53,6 +55,8 @@
     </Reference>
     <Reference Include="UnityEngine.Il2CppAssetBundleManager">
       <HintPath>refs\UnityEngine.Il2CppAssetBundleManager.dll</HintPath>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>Refs\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
       <HintPath>Refs\UnityEngine.PhysicsModule.dll</HintPath>

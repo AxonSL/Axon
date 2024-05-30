@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MEC;
 using UnityEngine;
+using Axon.Server.AssetBundle;
 
 namespace Axon.Server;
 
@@ -24,6 +25,7 @@ public class AxonPlugin : Plugin<AxonConfig>
     {
         Instance = this;
         MessageHandler.Init();
+        AssetBundleSpawner.Init();
         HookEvents();
         base.OnEnabled();
     }
@@ -32,7 +34,6 @@ public class AxonPlugin : Plugin<AxonConfig>
     {
         UnHookEvents();
         base.OnDisabled();
- 
     }
 
     private void HookEvents()
@@ -49,11 +50,9 @@ public class AxonPlugin : Plugin<AxonConfig>
 
     private void OnRoundStart()
     {
-        Log.Info("StartRound");
         foreach (var player in ReferenceHub.AllHubs)
         {
             if (player.IsHost) continue;
-            Log.Info(player.nicknameSync.Network_myNickSync);
 
             var msgTest = new TestMessage()
             {
@@ -61,54 +60,37 @@ public class AxonPlugin : Plugin<AxonConfig>
             };
             player.connectionToClient.Send(msgTest);
 
-
-            var msg = new SpawnAssetMessage()
-            {
-                objectId = 1,
-                bundleName = "v1",
-                assetName = "Assets/v1.prefab",
-                gameObjectName = "Axon Asset",
-                position = currentPosition,
-                rotation = Quaternion.Euler(currentRotation),
-                scale = Vector3.one,
-            };
-            
-            player.connectionToClient.Send(msg);
-            Timing.RunCoroutine(V1Spin());
-            Log.Info("Send spawnmessage to " + player.nicknameSync.Network_myNickSync);
+            v1 = AssetBundleSpawner.SpawnAsset("v1", "Assets/v1.prefab", "Axon Asset", player.transform.position, player.transform.rotation, Vector3.one * 0.5f);
         }
+        Timing.RunCoroutine(V1Spin());
     }
-    private Vector3 currentPosition = Vector3.zero;
+    private GameObject v1;
 
-    private Vector3 currentRotation = Vector3.zero;
     private void OnInteractingDoor(InteractingDoorEventArgs ev)
     {
-        currentPosition = ev.Player.Transform.position;
+        v1.transform.position = ev.Player.Transform.position;
     }
+
     private IEnumerator<float> V1Spin()
     {
-
         for (;;)
         {
             try
             {
-                currentRotation.y += 2;
+                var currentRotation = v1.transform.rotation.eulerAngles;
+                //currentRotation.y += 2;
+                //currentRotation.x += 2;
+                //currentRotation.z += 2;
 
-                var msg = new SpawnAssetMessage()
-                {
-                    objectId = 1,
-                    bundleName = "v1",
-                    assetName = "Assets/v1.prefab",
-                    gameObjectName = "Axon Asset",
-                    position = currentPosition,
-                    rotation = Quaternion.Euler(currentRotation),
-                    scale = Vector3.one*0.5f,
-                };
+                var pos = v1.transform.position;
+                pos.x += 0.01f;
 
-                foreach (var player in ReferenceHub.AllHubs.Where(player => !player.IsHost))
-                {
-                    player.connectionToClient.Send(msg);
-                }
+                var scale = v1.transform.localScale;
+                scale.y += 0.005f;
+
+                v1.transform.rotation = Quaternion.Euler(currentRotation);
+                v1.transform.position = pos;
+                v1.transform.localScale = scale;
             }
             catch (Exception e)
             {

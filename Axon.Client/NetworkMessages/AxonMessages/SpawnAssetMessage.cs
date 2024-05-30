@@ -14,7 +14,6 @@ public class SpawnAssetMessage : Il2CppSystem.Object //NetworkMessage
 {
     public SpawnAssetMessage(IntPtr ptr) : base(ptr) { }
 
-
     public SpawnAssetMessage() : base(ClassInjector.DerivedConstructorPointer<SpawnAssetMessage>())
     {
         ClassInjector.DerivedConstructorBody(this);
