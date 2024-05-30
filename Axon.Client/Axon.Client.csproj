@@ -51,8 +51,14 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>Refs\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>Refs\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
       <HintPath>Refs\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>Refs\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
 
