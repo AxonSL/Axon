@@ -1,4 +1,5 @@
 ﻿using Axon.NetworkMessages;
+using Axon.Server.NetworkMessages;
 using Exiled.API.Features;
 using System;
 using System.Collections.Generic;
@@ -78,7 +79,6 @@ public static class AssetBundleSpawner
         obj.transform.position = position;
         obj.transform.rotation = rotation;
         obj.transform.localScale = scale;
-        obj.SetActive(true);
 
         //Register Server Side
         _counter++;
@@ -86,6 +86,9 @@ public static class AssetBundleSpawner
         var dic = new Dictionary<uint, GameObject>(SpawnedGameObjects);
         dic[id] = obj;
         SpawnedGameObjects = new(dic);
+        var comp = obj.AddComponent<AxonAssetScript>();
+        comp.ObjectId = id;
+        obj.SetActive(true);
 
         //Register Client Side
         var msg = new SpawnAssetMessage()

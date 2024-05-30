@@ -100,7 +100,9 @@
     <Compile Include="AssetBundle\AssetBundleSpawner.cs" />
     <Compile Include="AxonConfig.cs" />
     <Compile Include="AxonPlugin.cs" />
+    <Compile Include="AssetBundle\AxonAssetScript.cs" />
     <Compile Include="NetworkMessages\AxonMessages\SpawnAssetMessage.cs" />
+    <Compile Include="NetworkMessages\AxonMessages\UpdateAssetMessage.cs" />
     <Compile Include="NetworkMessages\MessageHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NetworkMessages\AxonMessages\TestMessage.cs" />

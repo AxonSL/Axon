@@ -7,6 +7,7 @@ namespace Axon.Client.AssetBundle;
 
 public static class AssetBundleSpawner
 {
+    //TODO: Clear this on RoundRestart
     public static ReadOnlyDictionary<uint, GameObject> LoadedAssets { get; private set; } = new (new Dictionary<uint, GameObject>());   
 
     internal static void OnSpawnAssetMessage(SpawnAssetMessage message)
@@ -18,15 +19,9 @@ public static class AssetBundleSpawner
                 MelonLogger.Error("Server tried to spawn a Asset without a proper NetId. Object can't be spawned");
                 return;
             }
-            if (LoadedAssets.ContainsKey(message.objectId))
+            if (LoadedAssets.ContainsKey(message.objectId) && LoadedAssets[message.objectId] != null)
             {
-                //Todo: Do this better
-                if (LoadedAssets[message.objectId] == null)
-                {
-                    CreateAsset(message);
-                    return;
-                }
-                UpdateAsset(LoadedAssets[message.objectId], message);
+                MelonLogger.Warning("Server tried to spawn an already existing object");
                 return;
             }
 
@@ -40,7 +35,7 @@ public static class AssetBundleSpawner
 
     private static void CreateAsset(SpawnAssetMessage message)
     {
-        MelonLogger.Msg("Loading Asset! " + message.objectId);
+        MelonLogger.Msg("Loading Asset with objectID: " + message.objectId);
 
         if (!AssetBundleManager.AssetBundles.TryGetValue(message.bundleName, out var bundle)) 
         {
@@ -50,7 +45,7 @@ public static class AssetBundleSpawner
 
         var asset = bundle.LoadAsset<GameObject>(message.assetName);
         var obj = GameObject.Instantiate(asset);
-        obj.name = message.assetName;
+        obj.name = message.gameObjectName;
         obj.transform.position = message.position;
         obj.transform.rotation = message.rotation;
         obj.transform.localScale = message.scale;
@@ -61,11 +56,30 @@ public static class AssetBundleSpawner
         LoadedAssets = new(dic);
     }
 
-    private static void UpdateAsset(GameObject asset, SpawnAssetMessage message)
+    internal static void UpdateAsset(UpdateAssetMessage message)
     {
-        var transform = asset.transform;
-        transform.position = message.position;
-        transform.rotation = message.rotation;
-        transform.localScale = message.scale;
+        try
+        {
+            if(!LoadedAssets.TryGetValue(message.objectId, out var asset))
+            {
+                MelonLogger.Warning("Server tried to update an non existing object");
+                return;
+            }
+
+            var transform = asset.transform;
+
+            if ((message.syncDirtyBits & 1) == 1)
+                transform.position = message.position;
+
+            if ((message.syncDirtyBits & 2) == 2)
+                transform.rotation = message.rotation;
+
+            if ((message.syncDirtyBits & 4) == 4)
+                transform.localScale = message.scale;
+        }
+        catch(Exception e)
+        {
+            MelonLogger.Error("Axon.Client.AssetBundle.AssetBundleSpawner failed: " + e);
+        }
     }
 }

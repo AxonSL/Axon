@@ -68,7 +68,6 @@ public static class MessageHandler
                 helper.WriteUnsafe(writer, message);
                 break;
             }
-            MelonLogger.Msg("1");
 
             //NetworkDiagnostics.OnSend(message, channelId, writer.Position, 1);
             var data = writer.ToArraySegment();

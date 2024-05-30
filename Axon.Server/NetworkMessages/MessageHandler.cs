@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Axon.Server.NetworkMessages;
 
@@ -24,6 +25,11 @@ public static class MessageHandler
         Reader<SpawnAssetMessage>.read = ReadSpawnAssetMessage;
         NetworkServer.RegisterHandler<SpawnAssetMessage>(OnSpawnAssetMessage);
         Log.Info("SpawnAssetMessage: " + typeof(SpawnAssetMessage).FullName.GetStableHashCode());
+
+        //UpdateAssetMessage
+        Writer<UpdateAssetMessage>.write = WriteUpdateAssetMessage;
+        Reader<UpdateAssetMessage>.read = ReadUpdateAssetMessage;
+        NetworkServer.RegisterHandler<UpdateAssetMessage>(OnUpdateAssetMessage);
     }
 
     #region TestMessage
@@ -72,6 +78,56 @@ public static class MessageHandler
         };
     }
 
-    private static void OnSpawnAssetMessage(NetworkConnection connection, SpawnAssetMessage message) { }
+    private static void OnSpawnAssetMessage(NetworkConnection connection, SpawnAssetMessage message)
+    {
+        Log.Warn("Client sended SpawnAssetMessage");
+    }
+    #endregion
+
+    #region UpdateAssetMessage
+    private static void WriteUpdateAssetMessage(NetworkWriter writer, UpdateAssetMessage message)
+    {
+        writer.WriteUInt(message.objectId);
+        writer.WriteULong(message.syncDirtyBits);
+
+        if (message.syncDirtyBits == 0) return;
+
+        if ((message.syncDirtyBits & 1) == 1)
+            writer.WriteVector3(message.position);
+
+        if ((message.syncDirtyBits & 2) == 2)
+            writer.WriteQuaternion(message.rotation);
+
+        if ((message.syncDirtyBits & 4) == 4)
+            writer.WriteVector3(message.scale);
+    }
+
+    private static UpdateAssetMessage ReadUpdateAssetMessage(NetworkReader reader)
+    {
+        var message = new UpdateAssetMessage()
+        {
+            objectId = reader.ReadUInt(),
+            syncDirtyBits = reader.ReadULong(),
+        };
+
+        if(message.syncDirtyBits == 0)
+            return message;
+
+        if ((message.syncDirtyBits & 1) == 1)
+            message.position = reader.ReadVector3();
+
+        if ((message.syncDirtyBits & 2) == 2)
+            message.rotation = reader.ReadQuaternion();
+
+        if ((message.syncDirtyBits & 4) == 4)
+            message.scale = reader.ReadVector3();
+
+        return message;
+    }
+
+    private static void OnUpdateAssetMessage(NetworkConnection connection, UpdateAssetMessage message)
+    {
+        Log.Warn("Client sended UpdateAssetMessage");
+    }
     #endregion
 }
