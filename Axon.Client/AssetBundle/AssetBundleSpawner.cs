@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using UnityEngine;
 using Axon.NetworkMessages;
+using Object = UnityEngine.Object;
 
 namespace Axon.Client.AssetBundle;
 
@@ -44,12 +45,15 @@ public static class AssetBundleSpawner
         }
 
         var asset = bundle.LoadAsset<GameObject>(message.assetName);
-        var obj = GameObject.Instantiate(asset);
-        obj.name = message.gameObjectName;
+        var obj = Object.Instantiate(asset);
+        obj.name = message.assetName;
         obj.transform.position = message.position;
         obj.transform.rotation = message.rotation;
         obj.transform.localScale = message.scale;
+        MelonLogger.Msg(obj.layer);
 
+        MelonLogger.Msg(obj.active);
+        obj.SetActive(true);
 
         var dic = new Dictionary<uint, GameObject>(LoadedAssets);
         dic[message.objectId] = obj;
