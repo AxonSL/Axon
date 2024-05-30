@@ -85,6 +85,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>Refs\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Refs\UnityEngine.CoreModule.dll</HintPath>
@@ -94,6 +97,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssetBundle\AssetBundleSpawner.cs" />
     <Compile Include="AxonConfig.cs" />
     <Compile Include="AxonPlugin.cs" />
     <Compile Include="NetworkMessages\AxonMessages\SpawnAssetMessage.cs" />
