@@ -42,7 +42,7 @@ public static class MessageHandler
 
     private static void OnTestMessage(NetworkConnection connection, TestMessage message)
     {
-        Log.Info("Got Testmessage: " + message);
+        Log.Info("Got Testmessage: " + message.message);
     }
     #endregion
 

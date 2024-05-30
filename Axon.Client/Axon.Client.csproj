@@ -42,6 +42,9 @@
     <Reference Include="Il2CppNorthwoodLib">
       <HintPath>Refs\Il2CppNorthwoodLib.dll</HintPath>
     </Reference>
+    <Reference Include="Il2CppSystem.Core">
+      <HintPath>Refs\Il2CppSystem.Core.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>Refs\UnityEngine.dll</HintPath>
     </Reference>
