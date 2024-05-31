@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssetBundle\AssetBundleSpawner.cs" />
+    <Compile Include="AssetBundle\SpawnedAsset.cs" />
     <Compile Include="AxonConfig.cs" />
     <Compile Include="AxonPlugin.cs" />
     <Compile Include="AssetBundle\AxonAssetScript.cs" />

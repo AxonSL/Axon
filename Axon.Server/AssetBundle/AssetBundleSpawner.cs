@@ -1,6 +1,8 @@
 ﻿using Axon.NetworkMessages;
 using Axon.Server.NetworkMessages;
 using Exiled.API.Features;
+using Exiled.API.Interfaces;
+using Exiled.Events.EventArgs.Player;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +10,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityAssetBundle = UnityEngine.AssetBundle;
 
 namespace Axon.Server.AssetBundle;
@@ -21,7 +25,7 @@ public static class AssetBundleSpawner
 
     public static ReadOnlyDictionary<string, UnityAssetBundle> AssetBundles { get; private set; } = new(new Dictionary<string, UnityAssetBundle>());
 
-    public static ReadOnlyDictionary<uint, GameObject> SpawnedGameObjects { get; private set; } = new(new Dictionary<uint, GameObject>());
+    public static ReadOnlyCollection<SpawnedAsset> SpawnedAssets { get; private set; } = new(new List<SpawnedAsset>());
 
     internal static void Init()
     {
@@ -39,6 +43,29 @@ public static class AssetBundleSpawner
         }
 
         AssetBundles = new(dic);
+    }
+
+    internal static void OnJoin(JoinedEventArgs ev)
+    {
+        foreach(var spawned in SpawnedAssets)
+        {
+            var msg = new SpawnAssetMessage()
+            {
+                objectId = spawned.Id,
+                bundleName = spawned.Bundle,
+                assetName = spawned.AssetName,
+                gameObjectName = spawned.GameObject.name,
+                position = spawned.GameObject.transform.position,
+                rotation = spawned.GameObject.transform.rotation,
+                scale = spawned.GameObject.transform.localScale,
+            };
+            ev.Player.Connection.Send(msg);
+        }
+    }
+
+    internal static void OnRoundRestart()
+    {
+        SpawnedAssets = new(new List<SpawnedAsset>());
     }
 
 
@@ -83,12 +110,21 @@ public static class AssetBundleSpawner
         //Register Server Side
         _counter++;
         var id = _counter;
-        var dic = new Dictionary<uint, GameObject>(SpawnedGameObjects);
-        dic[id] = obj;
-        SpawnedGameObjects = new(dic);
         var comp = obj.AddComponent<AxonAssetScript>();
         comp.ObjectId = id;
-        obj.SetActive(true);
+        var spawnedAsset = new SpawnedAsset
+        {
+            Id = id,
+            Bundle = bundle,
+            AssetName = asset,
+            GameObject = obj,
+            Script = comp
+        };
+        var list = new List<SpawnedAsset>(SpawnedAssets)
+        {
+            spawnedAsset
+        };
+        SpawnedAssets = new(list);
 
         //Register Client Side
         var msg = new SpawnAssetMessage()

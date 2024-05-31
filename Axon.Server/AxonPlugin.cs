@@ -38,12 +38,18 @@ public class AxonPlugin : Plugin<AxonConfig>
 
     private void HookEvents()
     {
+        Exiled.Events.Handlers.Player.Joined += AssetBundleSpawner.OnJoin;
+        Exiled.Events.Handlers.Server.RestartingRound += AssetBundleSpawner.OnRoundRestart;
+
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
         Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;   
     }
 
     private void UnHookEvents()
     {
+        Exiled.Events.Handlers.Player.Joined -= AssetBundleSpawner.OnJoin;
+        Exiled.Events.Handlers.Server.RestartingRound -= AssetBundleSpawner.OnRoundRestart;
+
         Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
         Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
     }
@@ -62,7 +68,7 @@ public class AxonPlugin : Plugin<AxonConfig>
 
             v1 = AssetBundleSpawner.SpawnAsset("v1", "Assets/v1.prefab", "Axon Asset", player.transform.position, player.transform.rotation, Vector3.one * 0.5f);
         }
-        Timing.RunCoroutine(V1Spin());
+        //Timing.RunCoroutine(V1Spin());
     }
     private GameObject v1;
 
@@ -83,7 +89,7 @@ public class AxonPlugin : Plugin<AxonConfig>
                 //currentRotation.z += 2;
 
                 var pos = v1.transform.position;
-                pos.x += 0.01f;
+                //pos.x += 0.01f;
 
                 var scale = v1.transform.localScale;
                 scale.y += 0.005f;

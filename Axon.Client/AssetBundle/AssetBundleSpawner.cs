@@ -46,14 +46,10 @@ public static class AssetBundleSpawner
 
         var asset = bundle.LoadAsset<GameObject>(message.assetName);
         var obj = Object.Instantiate(asset);
-        obj.name = message.assetName;
+        obj.name = message.gameObjectName;
         obj.transform.position = message.position;
         obj.transform.rotation = message.rotation;
         obj.transform.localScale = message.scale;
-        MelonLogger.Msg(obj.layer);
-
-        MelonLogger.Msg(obj.active);
-        obj.SetActive(true);
 
         var dic = new Dictionary<uint, GameObject>(LoadedAssets);
         dic[message.objectId] = obj;
