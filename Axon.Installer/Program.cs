@@ -60,6 +60,14 @@ public static class Programm
         }
 
         //Install Melonloader
+        var zip = Path.Combine(moddedPath, "MelonLoader.x64.zip");
+        if (!File.Exists(zip))
+            File.Create(zip).Close();
+        Console.WriteLine("Downloading Melonloader");
+        DownloadFile("https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.x64.zip", zip);
+        Console.WriteLine("Extracting Melonloader");
+        System.IO.Compression.ZipFile.ExtractToDirectory(zip, moddedPath);
+        File.Delete(zip);
 
         //Finally
         Console.WriteLine("You game is now patched. In order to start it open a cmd and type \"SCPSL.exe -noauth\" in it.");
