@@ -4,7 +4,6 @@ using Axon.Shared.Meta;
 
 namespace Axon.Client.Event.Handlers;
 
-[Automatic]
 public static class RoundHandler
 {
     public static EventReactor<RoundStartEventArg> RoundStart { get; } = new EventReactor<RoundStartEventArg>();

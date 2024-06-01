@@ -1,10 +1,4 @@
 ﻿using Axon.NetworkMessages;
-using Exiled.API.Features;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Axon.Server.AssetBundle;
@@ -44,19 +38,19 @@ public class AxonAssetScript : MonoBehaviour
         {
             msg.position = transform.position;
             _lastPos = transform.position;
-            msg.syncDirtyBits += 1;
+            msg.syncDirtyBits |= 1;
         }
         if(_lastRot != transform.rotation)
         {
             msg.rotation = transform.rotation;
             _lastRot = transform.rotation;
-            msg.syncDirtyBits += 2;
+            msg.syncDirtyBits |= 2;
         }
         if(_lastScale != transform.localScale)
         {
             msg.scale = transform.localScale;
             _lastScale = transform.localScale;
-            msg.syncDirtyBits += 4;
+            msg.syncDirtyBits |= 4;
         }
         if (msg.syncDirtyBits == 0) return;
 

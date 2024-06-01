@@ -5,6 +5,7 @@ using Axon.Client.Event;
 using Axon.Client.Event.Args;
 using Axon.Client.Event.Handlers;
 using Axon.Client.NetworkMessages;
+using Axon.Shared;
 using Axon.Shared.Event;
 using Axon.Shared.Meta;
 using Il2Cpp;
@@ -28,9 +29,10 @@ public class AxonMod : MelonMod
 
         Instance = this;
 
-        EventManager.Init();
+        ShareMain.Init();
         CommandHandler.Init();
         MessageHandler.Init();
+        AssetBundleManager.Init();
 
         MenuHandler.Init();
         RoundHandler.Init();

@@ -4,7 +4,6 @@ using Axon.Shared.Meta;
 
 namespace Axon.Client.Event.Handlers;
 
-[Automatic]
 public static class MenuHandler
 {
     public static EventReactor<CreditHookEventArg> CreditsHook { get; } = new EventReactor<CreditHookEventArg>();

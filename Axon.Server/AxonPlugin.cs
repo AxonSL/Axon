@@ -1,4 +1,5 @@
-﻿using Axon.NetworkMessages;
+﻿using Axon.Shared;
+using Axon.NetworkMessages;
 using Axon.Server.NetworkMessages;
 using Exiled.API.Enums;
 using Exiled.API.Features;
@@ -26,15 +27,16 @@ public class AxonPlugin : Plugin<AxonConfig>
 
     public AxonPlugin()
     {
-        EventManager.Init();
+        ShareMain.Init();
     }
 
     public override void OnEnabled()
     {
         Instance = this;
+
+        HookEvents();
         MessageHandler.Init();
         AssetBundleSpawner.Init();
-        HookEvents();
         MetaAnalyzer.Analyze();
         base.OnEnabled();
     }

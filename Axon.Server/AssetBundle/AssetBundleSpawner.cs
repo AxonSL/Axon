@@ -1,18 +1,11 @@
 ﻿using Axon.NetworkMessages;
-using Axon.Server.NetworkMessages;
 using Exiled.API.Features;
-using Exiled.API.Interfaces;
 using Exiled.Events.EventArgs.Player;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using UnityEngine;
-using UnityEngine.Assertions;
+using Axon.Shared.Meta;
 using UnityAssetBundle = UnityEngine.AssetBundle;
 
 namespace Axon.Server.AssetBundle;

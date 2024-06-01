@@ -93,7 +93,7 @@ public static class EventManager
         listener.RegisterAll();
     }
 
-    public static void Init() => MetaAnalyzer.OnMeta.Subscribe(LoadMeta);
+    internal static void Init() => MetaAnalyzer.OnMeta.Subscribe(LoadMeta);
 
     private static void LoadMeta(MetaEvent ev)
     {

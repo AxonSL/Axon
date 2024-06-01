@@ -8,6 +8,11 @@ public static class MetaAnalyzer
 {
     public static EventReactor<MetaEvent> OnMeta = new EventReactor<MetaEvent>();
 
+    internal static void Init()
+    {
+        EventManager.RegisterEvent(OnMeta);
+    }
+
     public static void Analyze()
     {
         var assembly = Assembly.GetCallingAssembly();
@@ -26,17 +31,7 @@ public static class MetaAnalyzer
     {
         if (type.GetCustomAttribute<Automatic>() == null) return;
         var ev = new MetaEvent(type);
-        AnalyzeForInit(ev);
         OnMeta.Raise(ev);
-    }
-
-    private static void AnalyzeForInit(MetaEvent ev)
-    {
-        foreach(var method in ev.Type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
-        {
-            if(method.GetCustomAttribute<Init>() == null) continue;
-            method.Invoke(ev, null);
-        }
     }
 }
 

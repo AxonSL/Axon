@@ -10,7 +10,6 @@ using Axon.Shared.Meta;
 
 namespace Axon.Client.AssetBundle;
 
-[Automatic]
 public static class AssetBundleManager
 {
     private static bool _initiated = false;
@@ -19,8 +18,7 @@ public static class AssetBundleManager
     public static string AssetDirectory { get; private set; }
     public static ReadOnlyDictionary<string, Il2CppAssetBundle> AssetBundles { get; private set; } = new(new Dictionary<string, Il2CppAssetBundle>());
 
-    [Init]
-    private static void Init()
+    internal static void Init()
     {
         if(_initiated) return;
 

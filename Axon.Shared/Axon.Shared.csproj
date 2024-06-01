@@ -47,10 +47,10 @@
     <Compile Include="Event\EventReactor.cs" />
     <Compile Include="Event\IEvent.cs" />
     <Compile Include="Meta\Automatic.cs" />
-    <Compile Include="Meta\Init.cs" />
     <Compile Include="Meta\MetaAnalyzer.cs" />
     <Compile Include="Meta\MetaEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShareMain.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
