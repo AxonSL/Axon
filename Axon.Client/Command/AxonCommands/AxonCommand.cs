@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using Axon.Client.Meta;
+﻿using Axon.Shared.Meta;
 using MelonLoader;
-using static Il2CppSubtitles.SubtitleCategory;
-using UnityEngine;
-using Axon.Client.AssetBundle;
 
-namespace Axon.Client.Command.AxonCommands;
+namespace Axon.Shared.Command.AxonCommands;
 
 [Automatic]
 [AxonCommand(

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Axon.Client.AssetBundle;
+namespace Axon.Shared.AssetBundle;
 
 public static class AssetBundleManager
 {

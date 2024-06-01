@@ -1,18 +1,18 @@
-﻿using Axon.Client;
-using Axon.Client.AssetBundle;
-using Axon.Client.Components;
-using Axon.Client.Event;
-using Axon.Client.Event.Args;
-using Axon.Client.Event.Handlers;
-using Axon.Client.Meta;
-using Axon.Client.NetworkMessages;
+﻿using Axon.Shared;
+using Axon.Shared.AssetBundle;
+using Axon.Shared.Components;
+using Axon.Shared.Event;
+using Axon.Shared.Event.Args;
+using Axon.Shared.Event.Handlers;
+using Axon.Shared.Meta;
+using Axon.Shared.NetworkMessages;
 using Il2Cpp;
 using MelonLoader;
-using CommandHandler = Axon.Client.Command.CommandHandler;
+using CommandHandler = Axon.Shared.Command.CommandHandler;
 
 [assembly: MelonInfo(typeof(AxonMod), "Axon", "0.1.0", "Dimenzio & Tiliboyy")]
 [assembly: MelonGame("Northwood", "SCPSL")]
-namespace Axon.Client;
+namespace Axon.Shared;
 
 public class AxonMod : MelonMod
 {

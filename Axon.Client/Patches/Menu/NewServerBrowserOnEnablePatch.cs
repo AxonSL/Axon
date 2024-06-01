@@ -7,7 +7,7 @@ using HarmonyLib;
 using Il2Cpp;
 using MelonLoader;
 
-namespace Axon.Client.Patches.Menu;
+namespace Axon.Shared.Patches.Menu;
 
 [HarmonyPatch(typeof(NewServerBrowser), nameof(NewServerBrowser.OnEnable))]
 public class NewServerBrowserOnEnablePatch

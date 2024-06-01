@@ -1,12 +1,11 @@
-﻿using Axon.Client.Meta;
-using MelonLoader;
+﻿using Axon.Shared.Meta;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Axon.Client.Event;
+namespace Axon.Shared.Event;
 
 public static class EventManager
 {

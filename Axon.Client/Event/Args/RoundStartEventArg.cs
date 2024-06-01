@@ -1,3 +1,3 @@
-﻿namespace Axon.Client.Event.Args;
+﻿namespace Axon.Shared.Event.Args;
 
 public class RoundStartEventArg : IEvent { }

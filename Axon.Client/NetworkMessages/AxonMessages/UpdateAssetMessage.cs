@@ -1,6 +1,6 @@
-﻿using Axon.Client.AssetBundle;
-using Axon.Client.Meta;
-using Axon.Client.NetworkMessages;
+﻿using Axon.Shared.AssetBundle;
+using Axon.Shared.Meta;
+using Axon.Shared.NetworkMessages;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppMirror;
 using MelonLoader;

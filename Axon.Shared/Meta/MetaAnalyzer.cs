@@ -1,8 +1,8 @@
-﻿using Axon.Client.Event;
+﻿using Axon.Shared.Event;
 using System;
 using System.Reflection;
 
-namespace Axon.Client.Meta;
+namespace Axon.Shared.Meta;
 
 public static class MetaAnalyzer
 {
@@ -29,3 +29,4 @@ public static class MetaAnalyzer
         OnMeta.Raise(ev);
     }
 }
+

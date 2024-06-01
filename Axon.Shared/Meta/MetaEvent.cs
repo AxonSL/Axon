@@ -1,12 +1,9 @@
-﻿using Axon.Client.Event;
+﻿using Axon.Shared.Event;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Axon.Client.Meta;
+namespace Axon.Shared.Meta;
 
 public class MetaEvent : IEvent
 {

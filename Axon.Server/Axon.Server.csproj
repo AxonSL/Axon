@@ -114,5 +114,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Axon.Shared\Axon.Shared.csproj">
+      <Project>{42cf68e3-3112-4c2b-ab16-5118565e1a70}</Project>
+      <Name>Axon.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

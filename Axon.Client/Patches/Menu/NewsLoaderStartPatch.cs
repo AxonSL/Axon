@@ -8,7 +8,7 @@ using HarmonyLib;
 using MelonLoader;
 using UnityEngine;
 
-namespace Axon.Client.Patches.News;
+namespace Axon.Shared.Patches.News;
 
 [HarmonyPatch(typeof(NewsLoader), nameof(NewsLoader.Start))]
 public class NewsLoaderStartPatch

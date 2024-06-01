@@ -1,4 +1,4 @@
-﻿namespace Axon.Client.Event;
+﻿namespace Axon.Shared.Event;
 
 public enum EventMessageId
 {

@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Axon.Client.Event;
+namespace Axon.Shared.Event;
 
 /// <summary>
 /// Extendable class for easily wrapping methods to event reactor delegates.

@@ -2,7 +2,7 @@
 using Il2Cpp;
 using UnityEngine;
 
-namespace Axon.Client.API.Features;
+namespace Axon.Shared.API.Features;
 
 public class LocalPlayer : Player
 {

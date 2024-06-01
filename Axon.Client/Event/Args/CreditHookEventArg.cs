@@ -1,6 +1,6 @@
-﻿using Axon.Client.Components;
+﻿using Axon.Shared.Components;
 
-namespace Axon.Client.Event.Args;
+namespace Axon.Shared.Event.Args;
 
 public class CreditHookEventArg : IEvent
 {

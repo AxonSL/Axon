@@ -1,26 +1,26 @@
-﻿using Axon.Client.Components;
-using Axon.Client.Event.Args;
-using Axon.Client.Meta;
+﻿using Axon.Shared.Components;
+using Axon.Shared.Meta;
 using MelonLoader;
 
-namespace Axon.Client.Event;
+namespace Axon.Shared.Event;
 
 [Automatic]
 public class AxonEventHandler : EventListener
 {
     [EventHandler]
-    public void OnHookCredits(Axon.Client.Event.Args.CreditHookEventArg ev)
+    public void OnHookCredits(Axon.Shared.Event.Args.CreditHookEventArg ev)
     {
         MelonLogger.Msg("Appling Credits");
         var component = ev.CreditsHookComponent;
-        // Synapse Client Credits
+
+        // Axon Client Credits
         component.CreateCreditsCategory("Axon Client");
         component.CreateCreditsEntry("Dimenzio", "Maintainer", "Axon Client", CreditColors.CrabPink);
         component.CreateCreditsEntry("Tili", "Developer", "Axon Client", CreditColors.DevBlue);
 
         component.CreateCreditsEntry("Helight", "Helper", "Axon Client", CreditColors.Yellow);
 
-        // Synapse Server Credits
+        // Axon Server Credits
         component.CreateCreditsCategory("Axon Server");
         component.CreateCreditsEntry("Dimenzio", "Creator, Maintainer", "Axon Server", CreditColors.Red);
 

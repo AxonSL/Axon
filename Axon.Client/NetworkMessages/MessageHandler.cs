@@ -3,12 +3,12 @@ using Il2CppMirror;
 using MelonLoader;
 using Axon.NetworkMessages;
 using System.Collections.ObjectModel;
-using Axon.Client.Meta;
+using Axon.Shared.Meta;
 using Il2CppInterop.Runtime.Injection;
 using System.Threading.Channels;
 using Il2Cpp;
 
-namespace Axon.Client.NetworkMessages;
+namespace Axon.Shared.NetworkMessages;
 
 public static class MessageHandler
 {

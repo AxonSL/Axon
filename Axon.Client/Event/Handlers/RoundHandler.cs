@@ -1,6 +1,6 @@
-﻿using Axon.Client.Event.Args;
+﻿using Axon.Shared.Event.Args;
 
-namespace Axon.Client.Event.Handlers;
+namespace Axon.Shared.Event.Handlers;
 
 public static class RoundHandler
 {

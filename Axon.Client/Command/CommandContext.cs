@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Axon.Client.Command;
+namespace Axon.Shared.Command;
 
 public class CommandContext
 {

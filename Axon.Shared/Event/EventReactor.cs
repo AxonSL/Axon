@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Axon.Client.Event;
+namespace Axon.Shared.Event;
 
 //Credits:
 //https://github.com/AnomalousCoders/Neuron/blob/main/Neuron.Core/Events/EventReactor.cs
@@ -135,7 +132,6 @@ public class HandlerRegistrationComparer<T> : IComparer<HandlerRegistration<T>> 
 
 public static class VoidEventExtension
 {
-
     public static readonly VoidEvent RecyclableEvent = new();
 
     /// <summary>

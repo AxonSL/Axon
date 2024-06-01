@@ -1,8 +1,8 @@
-﻿using Axon.Client.Meta;
+﻿using Axon.Shared.Meta;
 using System.Collections.ObjectModel;
 using UnityEngine;
 
-namespace Axon.Client.Command;
+namespace Axon.Shared.Command;
 
 public static class CommandHandler
 {

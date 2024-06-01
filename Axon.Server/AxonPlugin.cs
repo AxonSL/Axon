@@ -10,6 +10,8 @@ using MEC;
 using UnityEngine;
 using Axon.Server.AssetBundle;
 using Axon.Server.Event;
+using Axon.Shared.Event;
+using Axon.Shared.Meta;
 
 namespace Axon.Server;
 
@@ -22,12 +24,18 @@ public class AxonPlugin : Plugin<AxonConfig>
 
     public static AxonPlugin Instance { get; private set; }
 
+    public AxonPlugin()
+    {
+        EventManager.Init();
+    }
+
     public override void OnEnabled()
     {
         Instance = this;
         MessageHandler.Init();
         AssetBundleSpawner.Init();
         HookEvents();
+        MetaAnalyzer.Analyze();
         base.OnEnabled();
     }
 

@@ -1,7 +1,7 @@
-﻿using Axon.Client.Event;
-using Axon.Client.Event.Handlers;
-using Axon.Client.Meta;
-using Axon.Client.NetworkMessages;
+﻿using Axon.Shared.Event;
+using Axon.Shared.Event.Handlers;
+using Axon.Shared.Meta;
+using Axon.Shared.NetworkMessages;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppMirror;
 
