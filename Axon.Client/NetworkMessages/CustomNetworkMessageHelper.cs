@@ -1,7 +1,7 @@
 ﻿using Il2CppMirror;
 using MelonLoader;
 
-namespace Axon.Shared.NetworkMessages;
+namespace Axon.Client.NetworkMessages;
 
 public abstract class CustomNetworkMessageHelper<T> : ICustomNetworkMessageHelper
     where T : Il2CppSystem.Object, new()

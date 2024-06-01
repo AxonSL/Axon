@@ -26,7 +26,17 @@ public static class MetaAnalyzer
     {
         if (type.GetCustomAttribute<Automatic>() == null) return;
         var ev = new MetaEvent(type);
+        AnalyzeForInit(ev);
         OnMeta.Raise(ev);
+    }
+
+    private static void AnalyzeForInit(MetaEvent ev)
+    {
+        foreach(var method in ev.Type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+        {
+            if(method.GetCustomAttribute<Init>() == null) continue;
+            method.Invoke(ev, null);
+        }
     }
 }
 

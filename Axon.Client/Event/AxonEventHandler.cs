@@ -1,14 +1,15 @@
-﻿using Axon.Shared.Components;
+﻿using Axon.Client.Components;
+using Axon.Shared.Event;
 using Axon.Shared.Meta;
 using MelonLoader;
 
-namespace Axon.Shared.Event;
+namespace Axon.Client.Event;
 
 [Automatic]
 public class AxonEventHandler : EventListener
 {
     [EventHandler]
-    public void OnHookCredits(Axon.Shared.Event.Args.CreditHookEventArg ev)
+    public void OnHookCredits(Axon.Client.Event.Args.CreditHookEventArg ev)
     {
         MelonLogger.Msg("Appling Credits");
         var component = ev.CreditsHookComponent;

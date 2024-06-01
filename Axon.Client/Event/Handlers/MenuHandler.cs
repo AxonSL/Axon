@@ -1,12 +1,16 @@
-﻿using Axon.Shared.Event.Args;
+﻿using Axon.Client.Event.Args;
+using Axon.Shared.Event;
+using Axon.Shared.Meta;
 
-namespace Axon.Shared.Event.Handlers;
+namespace Axon.Client.Event.Handlers;
 
+[Automatic]
 public static class MenuHandler
 {
     public static EventReactor<CreditHookEventArg> CreditsHook { get; } = new EventReactor<CreditHookEventArg>();
 
-    internal static void Init()
+    [Init]
+    private static void Init()
     {
         EventManager.RegisterEvent(CreditsHook);
     }

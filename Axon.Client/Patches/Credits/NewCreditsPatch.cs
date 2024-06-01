@@ -1,11 +1,11 @@
-﻿using Axon.Shared.Components;
+﻿using Axon.Client.Components;
 using HarmonyLib;
 using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Axon.Shared.Patches.Credits;
+namespace Axon.Client.Patches.Credits;
 [HarmonyPatch(typeof(NewCredits), nameof(NewCredits.OnButtonClick))]
 public class NewCreditsPatch
 {

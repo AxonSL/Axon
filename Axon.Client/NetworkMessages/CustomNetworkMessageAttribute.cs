@@ -1,4 +1,4 @@
-﻿namespace Axon.Shared.NetworkMessages;
+﻿namespace Axon.Client.NetworkMessages;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 public class CustomNetworkMessageAttribute : Attribute

@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
-namespace Axon.Client.Command;
+namespace Axon.Server.AssetBundle.CustomScript;
 
-public enum CommandStatusCode
+public abstract class AxonCustomScript : MonoBehaviour
 {
-    Success,
-    Error,
 }

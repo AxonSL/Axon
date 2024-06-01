@@ -7,7 +7,7 @@ using HarmonyLib;
 using Il2CppCommandSystem;
 using MelonLoader;
 
-namespace Axon.Shared.Patches.Command;
+namespace Axon.Client.Patches.Command;
 
 [HarmonyPatch(typeof(Il2CppGameCore.Console),nameof(Il2CppGameCore.Console.TypeCommand))]
 public class CommandHandlerTryGetCommandPatch
@@ -17,7 +17,7 @@ public class CommandHandlerTryGetCommandPatch
     {
         try
         {
-            return !Axon.Shared.Command.CommandHandler.OnCommand(cmd);
+            return !Axon.Client.Command.CommandHandler.OnCommand(cmd);
         }
         catch(Exception e)
         {

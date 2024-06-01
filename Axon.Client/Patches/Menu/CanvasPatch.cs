@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 
-namespace Axon.Shared.Patches.Menu;
+namespace Axon.Client.Patches.Menu;
 
 [HarmonyPatch(typeof(NewMainMenu),nameof(NewMainMenu.Start))]
 public static class CanvasPatch

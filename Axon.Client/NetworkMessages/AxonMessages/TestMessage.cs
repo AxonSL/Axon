@@ -1,4 +1,4 @@
-﻿using Axon.Shared.NetworkMessages;
+﻿using Axon.Client.NetworkMessages;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppMirror;
 using MelonLoader;

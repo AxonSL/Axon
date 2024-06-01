@@ -1,11 +1,11 @@
-﻿using Axon.Shared.Event.Args;
-using Axon.Shared.Event.Handlers;
+﻿using Axon.Client.Event.Args;
+using Axon.Client.Event.Handlers;
 using Il2CppTMPro;
 using MelonLoader;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Axon.Shared.Components;
+namespace Axon.Client.Components;
 
 [RegisterTypeInIl2Cpp]
 public class CreditsHookComponent : MonoBehaviour

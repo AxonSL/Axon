@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using UnityEngine;
 
-namespace Axon.Shared.Command;
+namespace Axon.Client.Command;
 
 public static class CommandHandler
 {

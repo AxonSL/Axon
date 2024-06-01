@@ -8,7 +8,7 @@ using Il2CppInterop.Runtime.Injection;
 using System.Threading.Channels;
 using Il2Cpp;
 
-namespace Axon.Shared.NetworkMessages;
+namespace Axon.Client.NetworkMessages;
 
 public static class MessageHandler
 {

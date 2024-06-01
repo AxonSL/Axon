@@ -4,7 +4,7 @@ using Il2CppInventorySystem.Items;
 using Il2CppUtils.NonAllocLINQ;
 using UnityEngine;
 
-namespace Axon.Shared.API.Features;
+namespace Axon.Client.API.Features;
 
 public class Player
 {

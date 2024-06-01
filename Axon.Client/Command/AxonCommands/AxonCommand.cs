@@ -1,7 +1,7 @@
 ﻿using Axon.Shared.Meta;
 using MelonLoader;
 
-namespace Axon.Shared.Command.AxonCommands;
+namespace Axon.Client.Command.AxonCommands;
 
 [Automatic]
 [AxonCommand(

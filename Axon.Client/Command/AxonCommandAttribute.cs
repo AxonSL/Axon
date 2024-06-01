@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Axon.Shared.Command;
+namespace Axon.Client.Command;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 public class AxonCommandAttribute : Attribute

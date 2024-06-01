@@ -1,9 +1,9 @@
-﻿using Axon.Shared.NetworkMessages;
+﻿using Axon.Client.NetworkMessages;
 using HarmonyLib;
 using Il2CppMirror;
 using MelonLoader;
 
-namespace Axon.Shared.Patches.Mirror;
+namespace Axon.Client.Patches.Mirror;
 
 [HarmonyPatch(typeof(NetworkManager),nameof(NetworkManager.RegisterClientMessages))]
 public static class NetworkManagerRegisterClientMessages

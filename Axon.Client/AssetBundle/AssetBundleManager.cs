@@ -6,9 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Axon.Shared.Meta;
 
-namespace Axon.Shared.AssetBundle;
+namespace Axon.Client.AssetBundle;
 
+[Automatic]
 public static class AssetBundleManager
 {
     private static bool _initiated = false;
@@ -17,7 +19,8 @@ public static class AssetBundleManager
     public static string AssetDirectory { get; private set; }
     public static ReadOnlyDictionary<string, Il2CppAssetBundle> AssetBundles { get; private set; } = new(new Dictionary<string, Il2CppAssetBundle>());
 
-    internal static void Init()
+    [Init]
+    private static void Init()
     {
         if(_initiated) return;
 

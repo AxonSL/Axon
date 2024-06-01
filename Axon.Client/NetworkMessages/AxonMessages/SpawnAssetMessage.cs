@@ -1,6 +1,6 @@
-﻿using Axon.Shared.AssetBundle;
+﻿using Axon.Client.AssetBundle;
 using Axon.Shared.Meta;
-using Axon.Shared.NetworkMessages;
+using Axon.Client.NetworkMessages;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppMirror;
 using UnityEngine;

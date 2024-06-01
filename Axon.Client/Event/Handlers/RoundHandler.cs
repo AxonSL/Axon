@@ -1,7 +1,10 @@
-﻿using Axon.Shared.Event.Args;
+﻿using Axon.Client.Event.Args;
+using Axon.Shared.Event;
+using Axon.Shared.Meta;
 
-namespace Axon.Shared.Event.Handlers;
+namespace Axon.Client.Event.Handlers;
 
+[Automatic]
 public static class RoundHandler
 {
     public static EventReactor<RoundStartEventArg> RoundStart { get; } = new EventReactor<RoundStartEventArg>();
@@ -10,7 +13,8 @@ public static class RoundHandler
 
     public static EventReactor<RoundRestartEventArg> RoundRestart { get; } = new EventReactor<RoundRestartEventArg>();
 
-    internal static void Init()
+    [Init]
+    private static void Init()
     {
         EventManager.RegisterEvent(RoundStart);
         EventManager.RegisterEvent(RoundEnd);

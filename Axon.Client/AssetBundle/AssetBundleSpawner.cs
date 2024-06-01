@@ -4,7 +4,7 @@ using UnityEngine;
 using Axon.NetworkMessages;
 using Object = UnityEngine.Object;
 
-namespace Axon.Shared.AssetBundle;
+namespace Axon.Client.AssetBundle;
 
 public static class AssetBundleSpawner
 {
