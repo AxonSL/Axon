@@ -9,8 +9,7 @@ public static class MenuHandler
 {
     public static EventReactor<CreditHookEventArg> CreditsHook { get; } = new EventReactor<CreditHookEventArg>();
 
-    [Init]
-    private static void Init()
+    internal static void Init()
     {
         EventManager.RegisterEvent(CreditsHook);
     }

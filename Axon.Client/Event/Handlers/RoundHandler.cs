@@ -13,8 +13,7 @@ public static class RoundHandler
 
     public static EventReactor<RoundRestartEventArg> RoundRestart { get; } = new EventReactor<RoundRestartEventArg>();
 
-    [Init]
-    private static void Init()
+    internal static void Init()
     {
         EventManager.RegisterEvent(RoundStart);
         EventManager.RegisterEvent(RoundEnd);

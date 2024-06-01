@@ -31,6 +31,9 @@ public class AxonMod : MelonMod
         EventManager.Init();
         CommandHandler.Init();
         MessageHandler.Init();
+
+        MenuHandler.Init();
+        RoundHandler.Init();
         
         //Analyze should always be called last so that all handlers/events are registered
         MetaAnalyzer.Analyze();
