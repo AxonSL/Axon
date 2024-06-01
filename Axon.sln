@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axon.Shared", "Axon.Shared\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axon.Client", "Axon.Client\Axon.Client.csproj", "{FA6A04EC-F45B-44F7-B53C-846962419E8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axon.Installer", "Axon.Installer\Axon.Installer.csproj", "{55305CE3-E0BC-438A-9E85-A915CD0E9580}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axon.Installer", "Axon.Installer\Axon.Installer.csproj", "{55305CE3-E0BC-438A-9E85-A915CD0E9580}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
