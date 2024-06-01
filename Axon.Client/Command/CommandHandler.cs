@@ -1,13 +1,5 @@
 ﻿using Axon.Client.Meta;
-using Il2CppGameCore;
-using MelonLoader;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using UnityEngine;
 
 namespace Axon.Client.Command;

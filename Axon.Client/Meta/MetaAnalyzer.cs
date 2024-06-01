@@ -8,11 +8,6 @@ public static class MetaAnalyzer
 {
     public static EventReactor<MetaEvent> OnMeta = new EventReactor<MetaEvent>();
 
-    internal static void Init()
-    {
-        AxonMod.EventManager.RegisterEvent(OnMeta);
-    }
-
     public static void Analyze()
     {
         var assembly = Assembly.GetCallingAssembly();

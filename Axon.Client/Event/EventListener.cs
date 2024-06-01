@@ -14,11 +14,9 @@ namespace Axon.Client.Event;
 public abstract class EventListener
 {
     private Dictionary<Type, object> _subscriptions = new();
-    private EventManager _managerReference;
 
-    internal void RegisterAll(EventManager manger)
+    internal void RegisterAll()
     {
-        _managerReference = manger;
         foreach (var methodInfo in GetType().GetMethods().Where(method => method.GetCustomAttribute<EventHandlerAttribute>() is not null))
         {
             var attribute = methodInfo.GetCustomAttribute<EventHandlerAttribute>();
@@ -26,7 +24,7 @@ public abstract class EventListener
             if (parameters.Length != 1) throw new Exception("EventHandler must have a single Event parameter");
             var eventParameter = parameters[0];
             var eventType = eventParameter.ParameterType;
-            var reactor = manger.GetUnsafe(eventType);
+            var reactor = EventManager.GetUnsafe(eventType);
             var subscribeUnsafe = reactor.SubscribeUnsafe(this, methodInfo, attribute.Priority);
             _subscriptions[eventType] = subscribeUnsafe;
         }
@@ -38,19 +36,12 @@ public abstract class EventListener
     /// <exception cref="Exception">if the listener is not linked</exception>
     public void UnregisterAll()
     {
-        if (_managerReference != null)
+        foreach (var subscription in _subscriptions)
         {
-            foreach (var subscription in _subscriptions)
-            {
-                _managerReference.GetUnsafe(subscription.Key).UnsubscribeUnsafe(subscription.Value);
-            }
+            EventManager.GetUnsafe(subscription.Key).UnsubscribeUnsafe(subscription.Value);
+        }
 
-            _subscriptions.Clear();
-        }
-        else
-        {
-            throw new Exception("No manager is reference");
-        }
+        _subscriptions.Clear();
     }
 }
 

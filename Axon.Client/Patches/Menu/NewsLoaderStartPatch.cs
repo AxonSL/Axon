@@ -23,8 +23,8 @@ public class NewsLoaderStartPatch
             __instance._announcements.Add(new NewsLoader.Announcement(
                 $"<color=#ff3300>Axon</color>",
                 "<b><size=20>Welcome to Axon, a SCP:SL modded version.</size></b>\n" +
-                "\n<color=#ec0c02>Alpha Built</color>",
-                "26.05.24",
+                "\n<color=#ec0c02>Alpha Build</color>",
+                "01.06.24",
                 "", GameObject.FindObjectOfType<NewsElement>()));
             __instance.ShowAnnouncement(0);
             return false;

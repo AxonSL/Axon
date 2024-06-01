@@ -2,9 +2,9 @@
 
 namespace Axon.Client.Event.Args;
 
-public class CreditHook : IEvent
+public class CreditHookEventArg : IEvent
 {
-    public CreditHook(CreditsHookComponent creditsHookComponent)
+    public CreditHookEventArg(CreditsHookComponent creditsHookComponent)
     {
         CreditsHookComponent = creditsHookComponent;
     }

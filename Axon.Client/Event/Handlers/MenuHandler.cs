@@ -4,9 +4,10 @@ namespace Axon.Client.Event.Handlers;
 
 public static class MenuHandler
 {
+    public static EventReactor<CreditHookEventArg> CreditsHook { get; } = new EventReactor<CreditHookEventArg>();
+
     internal static void Init()
     {
-        AxonMod.EventManager.RegisterEvent(CreditsHook);
+        EventManager.RegisterEvent(CreditsHook);
     }
-    public static EventReactor<CreditHook> CreditsHook = new EventReactor<CreditHook>();
 }

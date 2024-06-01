@@ -1,4 +1,5 @@
 ﻿using Axon.NetworkMessages;
+using Axon.Server.Event;
 using Exiled.API.Features;
 using Mirror;
 using System;
@@ -30,6 +31,11 @@ public static class MessageHandler
         Writer<UpdateAssetMessage>.write = WriteUpdateAssetMessage;
         Reader<UpdateAssetMessage>.read = ReadUpdateAssetMessage;
         NetworkServer.RegisterHandler<UpdateAssetMessage>(OnUpdateAssetMessage);
+
+        //EventMessage
+        Writer<EventMessage>.write = WriteEventMessage;
+        Reader<EventMessage>.read = ReadEventMessage;
+        NetworkServer.RegisterHandler<EventMessage>(OnEventMessage);
     }
 
     #region TestMessage
@@ -128,6 +134,26 @@ public static class MessageHandler
     private static void OnUpdateAssetMessage(NetworkConnection connection, UpdateAssetMessage message)
     {
         Log.Warn("Client sended UpdateAssetMessage");
+    }
+    #endregion
+
+    #region EventMessage
+    private static void WriteEventMessage(NetworkWriter writer, EventMessage message)
+    {
+        writer.WriteInt((int)message.eventId);
+    }
+
+    private static EventMessage ReadEventMessage(NetworkReader reader)
+    {
+        return new EventMessage()
+        {
+            eventId = (EventMessageId)reader.ReadInt()
+        };
+    }
+
+    private static void OnEventMessage(NetworkConnection connection, EventMessage message)
+    {
+        Log.Info("Client sended a Event message");
     }
     #endregion
 }

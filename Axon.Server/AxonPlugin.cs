@@ -9,6 +9,7 @@ using System.Linq;
 using MEC;
 using UnityEngine;
 using Axon.Server.AssetBundle;
+using Axon.Server.Event;
 
 namespace Axon.Server;
 
@@ -38,8 +39,14 @@ public class AxonPlugin : Plugin<AxonConfig>
 
     private void HookEvents()
     {
+        //AssetBundle
         Exiled.Events.Handlers.Player.Joined += AssetBundleSpawner.OnJoin;
         Exiled.Events.Handlers.Server.RestartingRound += AssetBundleSpawner.OnRoundRestart;
+
+        //RoundHandler
+        Exiled.Events.Handlers.Server.RoundStarted += RoundEventHandler.OnRoundStart;
+        Exiled.Events.Handlers.Server.RoundEnded += RoundEventHandler.OnRoundEnd;
+        Exiled.Events.Handlers.Server.RestartingRound += RoundEventHandler.OnRoundRestart;
 
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
         Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;   
