@@ -1,5 +1,6 @@
 ﻿using Axon.Client.Event.Args;
 using Axon.Client.Event.Handlers;
+using Il2CppInterop.Runtime.Attributes;
 using Il2CppTMPro;
 using MelonLoader;
 using UnityEngine;
@@ -87,7 +88,8 @@ public class CreditsHookComponent : MonoBehaviour
             }
         }
     }
-        
+
+    [HideFromIl2Cpp]
     public CreditsCategoryInfo GetCreditsCategory(string catName)
     {
         if (!_creditsReadyToUse)

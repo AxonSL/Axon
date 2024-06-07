@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Axon.Shared.Meta;
+using Axon.Server.AssetBundle;
 
 namespace Axon.Server.NetworkMessages;
 
@@ -37,6 +38,11 @@ public static class MessageHandler
         Writer<EventMessage>.write = WriteEventMessage;
         Reader<EventMessage>.read = ReadEventMessage;
         NetworkServer.RegisterHandler<EventMessage>(OnEventMessage);
+
+        //SyncVarMessage
+        Writer<SyncVarMessage>.write = WriteSyncVarMessage;
+        Reader<SyncVarMessage>.read = ReadSyncVarMessage;
+        NetworkServer.RegisterHandler<SyncVarMessage>(OnSyncVarMessage);
     }
 
     #region TestMessage
@@ -69,6 +75,9 @@ public static class MessageHandler
         writer.WriteVector3(message.position);
         writer.WriteQuaternion(message.rotation);
         writer.WriteVector3(message.scale);
+        var components = string.Join(":", message.components);
+        Log.Warn("Send comp string: " + components);
+        writer.WriteString(components);
     }
 
     private static SpawnAssetMessage ReadSpawnAssetMessage(NetworkReader reader)
@@ -82,6 +91,7 @@ public static class MessageHandler
             position = reader.ReadVector3(),
             rotation = reader.ReadQuaternion(),
             scale = reader.ReadVector3(),
+            components = reader.ReadString().Split(':'),
         };
     }
 
@@ -155,6 +165,33 @@ public static class MessageHandler
     private static void OnEventMessage(NetworkConnection connection, EventMessage message)
     {
         Log.Info("Client sended a Event message");
+    }
+    #endregion
+
+    #region SyncVarMessage
+    private static void WriteSyncVarMessage(NetworkWriter writer, SyncVarMessage message)
+    {
+        writer.WriteUInt(message.objectId);
+        writer.WriteString(message.scriptName);
+        writer.WriteULong(message.syncDirtyBits);
+        writer.WriteArraySegmentAndSize(message.data);
+    }
+
+    private static SyncVarMessage ReadSyncVarMessage(NetworkReader reader)
+    {
+        return new()
+        {
+            objectId = reader.ReadUInt(),
+            scriptName = reader.ReadString(),
+            syncDirtyBits = reader.ReadULong(),
+            data = reader.ReadArraySegmentAndSize(),
+        };
+    }
+
+    private static void OnSyncVarMessage(NetworkConnection connection, SyncVarMessage message)
+    {
+        message.connection = connection;
+        AssetBundleSpawner.OnSyncVarMessage(message);
     }
     #endregion
 }

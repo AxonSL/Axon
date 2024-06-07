@@ -1,33 +1,37 @@
-﻿using Axon.NetworkMessages;
+﻿using Axon.Client.NetworkMessages;
+using Axon.NetworkMessages;
 using Axon.Shared.CustomScripts;
-using Exiled.API.Features;
-using Mirror;
-using PlayerRoles;
-using System;
-using System.Collections.Generic;
+using Axon.Shared.Meta;
+using Il2Cpp;
+using Il2CppGameCore;
+using Il2CppInterop.Runtime.Attributes;
+using Il2CppInterop.Runtime.Injection;
+using Il2CppMirror;
+using MelonLoader;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Axon.Server.AssetBundle.CustomScript;
+namespace Axon.Client.AssetBundle.CustomScript;
 
 public abstract class AxonCustomScript : MonoBehaviour
 {
+    public AxonCustomScript(IntPtr ptr) : base(ptr) { }
+
     private ulong _syncDirtyBits = 0;
 
     public string UniqueName { get; internal set; }
 
+    [HideFromIl2Cpp]
     public AxonAssetScript AxonAssetScript { get; internal set; }
 
-    public ReadOnlyDictionary<AxonSyncVarId, bool> SyncVars {  get; private set; }
+    [HideFromIl2Cpp]
+    public ReadOnlyDictionary<AxonSyncVarId, bool> SyncVars { get; private set; }
 
     public virtual void Awake()
     {
         var dic = new Dictionary<AxonSyncVarId, bool>();
-        foreach(var field in GetType().GetFields())
+        foreach (var field in GetType().GetFields())
         {
             var attribute = field.GetCustomAttribute<AxonSyncVarAttribute>();
             if (attribute == null) continue;
@@ -48,53 +52,49 @@ public abstract class AxonCustomScript : MonoBehaviour
 
         var writer = new NetworkWriter();
 
-        foreach(var syncVar in SyncVars.Keys)
+        foreach (var syncVar in SyncVars.Keys)
         {
             if (((ulong)syncVar | _syncDirtyBits) == 0) continue;
             WriteSyncVar(syncVar, writer);
         }
-        msg.data = writer.ToArraySegment();
-
-        foreach (var hub in ReferenceHub.AllHubs)
-        {
-            if (hub.IsHost) continue;
-            hub.connectionToClient.Send(msg);
-        }
+        msg.data = writer.buffer;
+        msg.SendCustomNetworkMessage();
         _syncDirtyBits = 0;
     }
 
+    [HideFromIl2Cpp]
     protected virtual void WriteSyncVar(AxonSyncVarId syncVarId, NetworkWriter writer) { }
 
+    [HideFromIl2Cpp]
     protected virtual void ReadSyncVar(AxonSyncVarId syncVarId, NetworkReader reader) { }
 
-    public virtual bool CheckIfAllowed(AxonSyncVarId syncVar, NetworkConnection connection) => true;
+    [HideFromIl2Cpp]
+    public virtual bool CheckIfAllowed(AxonSyncVarId syncVar) => true;
 
+    [HideFromIl2Cpp]
     public void UpdateSyncVar(AxonSyncVarId syncVarId)
     {
         _syncDirtyBits += (ulong)syncVarId;
+        //TODO: Implemts check if the client is allowed to do this
     }
 
+    [HideFromIl2Cpp]
     internal void ReceiveMessage(SyncVarMessage message)
     {
         var dirty = message.syncDirtyBits;
-        var reader = new NetworkReader(message.data);
-        foreach(var id in (AxonSyncVarId[])Enum.GetValues(typeof(AxonSyncVarId)))
+        var reader = NetworkReaderPool.Get(message.data);
+        foreach (var id in (AxonSyncVarId[])Enum.GetValues(typeof(AxonSyncVarId)))
         {
-            if ((dirty & (ulong)id) == 0) continue;
+            if ((dirty & ((ulong)id)) == 0) continue;
 
-            if(!SyncVars.TryGetValue(id, out var serverOnly))
+            if (!SyncVars.TryGetValue(id, out _))
             {
-                Log.Warn("Client tried to update a sync var of the component " + UniqueName + " that does not exist server side. Requested Sync Var Id:" + id.ToString());
-                return;
-            }
-
-            if (serverOnly || CheckIfAllowed(id, message.connection))
-            {
-                Log.Warn("Client tried to change a syncVar it is not allowed to change");
+                MelonLogger.Warning("Server tried to update a sync var of the component " + UniqueName + " that does not exist client side. Requested Sync Var Id:" + id.ToString());
                 return;
             }
 
             ReadSyncVar(id, reader);
         }
+        NetworkReaderPool.Return(reader);
     }
 }

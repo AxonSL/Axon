@@ -12,4 +12,6 @@ public struct SpawnAssetMessage : NetworkMessage
     public Vector3 position;
     public Quaternion rotation;
     public Vector3 scale;
+    public string[] components;
+    public byte[] data;
 }

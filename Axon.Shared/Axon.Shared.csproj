@@ -42,6 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomScripts\AxonScriptAttribute.cs" />
+    <Compile Include="CustomScripts\AxonSyncVarAttribute.cs" />
+    <Compile Include="CustomScripts\AxonSyncVarId.cs" />
     <Compile Include="Event\EventListener.cs" />
     <Compile Include="Event\EventManager.cs" />
     <Compile Include="Event\EventReactor.cs" />

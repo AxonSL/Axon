@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Axon.Client.AssetBundle;
+using UnityEngine;
 
-namespace Axon.Server.AssetBundle;
+namespace Axon.Client.AssetBundle;
 
 public class SpawnedAsset
 {

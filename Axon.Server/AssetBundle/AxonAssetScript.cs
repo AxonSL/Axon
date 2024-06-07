@@ -5,7 +5,7 @@ namespace Axon.Server.AssetBundle;
 
 public class AxonAssetScript : MonoBehaviour
 {
-    public uint ObjectId { get; internal set; }
+    public SpawnedAsset SpawnedAsset { get; internal set; }
 
     private Vector3 _lastPos = Vector3.zero;
     private Quaternion _lastRot = Quaternion.identity;
@@ -27,7 +27,7 @@ public class AxonAssetScript : MonoBehaviour
     {
         var msg = new UpdateAssetMessage()
         {
-            objectId = ObjectId,
+            objectId = SpawnedAsset.Id,
             syncDirtyBits = 0,
             position = _lastPos,
             rotation = _lastRot,

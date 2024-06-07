@@ -13,6 +13,7 @@ using Axon.Server.AssetBundle;
 using Axon.Server.Event;
 using Axon.Shared.Event;
 using Axon.Shared.Meta;
+using Axon.Server.AssetBundle.CustomScript;
 
 namespace Axon.Server;
 
@@ -83,19 +84,22 @@ public class AxonPlugin : Plugin<AxonConfig>
             };
             player.connectionToClient.Send(msgTest);
 
-            v1 = AssetBundleSpawner.SpawnAsset("v1", "Assets/v1.prefab", "Axon Asset", player.transform.position, player.transform.rotation, Vector3.one * 0.5f);
+            v1 = AssetBundleSpawner.SpawnAsset("v1", "Assets/v1.prefab", "Axon Asset", player.transform.position - player.transform.forward, player.transform.rotation, Vector3.one * 0.5f, "MyPlugin.Example");
         }
-        //Timing.RunCoroutine(V1Spin());
+        Timing.RunCoroutine(V1Spin());
     }
-    private GameObject v1;
+    private AxonAssetScript v1;
 
     private void OnInteractingDoor(InteractingDoorEventArgs ev)
     {
-        v1.transform.position = ev.Player.Transform.position;
+        v1.transform.position = ev.Player.Transform.position - ev.Player.Transform.forward;
     }
 
     private IEnumerator<float> V1Spin()
     {
+        yield return Timing.WaitForSeconds(2f);
+        v1.GetComponent<ExampleScript>().MyField = "Please just work and be set client side my brain is already molten";
+        yield break;
         for (;;)
         {
             try

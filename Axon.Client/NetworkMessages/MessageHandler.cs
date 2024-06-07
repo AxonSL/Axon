@@ -45,6 +45,7 @@ public static class MessageHandler
             };
             Helpers = new(list);
 
+            
             ClassInjector.RegisterTypeInIl2Cpp(ev.Type, new RegisterTypeOptions()
             {
                 Interfaces = new Type[] { typeof(NetworkMessage) }
