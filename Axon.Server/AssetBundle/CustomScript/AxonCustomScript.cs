@@ -88,13 +88,21 @@ public abstract class AxonCustomScript : MonoBehaviour
                 return;
             }
 
-            if (serverOnly || CheckIfAllowed(id, message.connection))
+            if (serverOnly || !CheckIfAllowed(id, message.connection))
             {
                 Log.Warn("Client tried to change a syncVar it is not allowed to change");
                 return;
             }
 
             ReadSyncVar(id, reader);
+        }
+    }
+
+    internal void WriteAll(NetworkWriter writer)
+    {
+        foreach(var  syncVar in SyncVars.Keys)
+        {
+            WriteSyncVar(syncVar, writer);
         }
     }
 }

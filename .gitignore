@@ -607,3 +607,4 @@ FodyWeavers.xsd
 
 Axon.Client/Refs
 Axon.Server/Refs
+Axon.Installer/Refs

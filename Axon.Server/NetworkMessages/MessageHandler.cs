@@ -75,9 +75,8 @@ public static class MessageHandler
         writer.WriteVector3(message.position);
         writer.WriteQuaternion(message.rotation);
         writer.WriteVector3(message.scale);
-        var components = string.Join(":", message.components);
-        Log.Warn("Send comp string: " + components);
-        writer.WriteString(components);
+        writer.WriteString(string.Join(":", message.components));
+        writer.WriteArraySegmentAndSize(message.componetsData);
     }
 
     private static SpawnAssetMessage ReadSpawnAssetMessage(NetworkReader reader)
@@ -92,6 +91,7 @@ public static class MessageHandler
             rotation = reader.ReadQuaternion(),
             scale = reader.ReadVector3(),
             components = reader.ReadString().Split(':'),
+            componetsData = reader.ReadArraySegmentAndSize(),
         };
     }
 

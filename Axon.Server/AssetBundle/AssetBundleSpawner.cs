@@ -10,6 +10,8 @@ using UnityAssetBundle = UnityEngine.AssetBundle;
 using Axon.Server.AssetBundle.CustomScript;
 using System;
 using Axon.Shared.CustomScripts;
+using Mirror;
+using System.Linq;
 
 namespace Axon.Server.AssetBundle;
 
@@ -68,7 +70,20 @@ public static class AssetBundleSpawner
                 scale = spawned.GameObject.transform.localScale,
                 components = spawned.Components,
             };
+
+            var allComps = spawned.GameObject.GetComponents<AxonCustomScript>().Where(x => x.SyncVars.Count > 0);
+            var writer = NetworkWriterPool.Get();
+            writer.WriteUShort((ushort)allComps.Count());
+
+            foreach (var component in allComps)
+            {
+                writer.WriteString(component.UniqueName);
+                component.WriteAll(writer);
+            }
+
+            msg.componetsData = writer.ToArraySegment();
             ev.Player.Connection.Send(msg);
+            //TODO: Test if this works: NetworkWriterPool.Return(writer);
         }
     }
 
@@ -196,6 +211,7 @@ public static class AssetBundleSpawner
             rotation = rotation,
             scale = scale,
             components = components,
+            componetsData = new ArraySegment<byte>(),
         };
         foreach(var hub in ReferenceHub.AllHubs)
         {

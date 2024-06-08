@@ -1,4 +1,5 @@
 ﻿using Mirror;
+using System;
 using UnityEngine;
 
 namespace Axon.NetworkMessages;
@@ -13,5 +14,5 @@ public struct SpawnAssetMessage : NetworkMessage
     public Quaternion rotation;
     public Vector3 scale;
     public string[] components;
-    public byte[] data;
+    public ArraySegment<byte> componetsData;
 }

@@ -24,7 +24,7 @@ public static class Programm
         var versionsString = client.GetStringAsync(uriResult).GetAwaiter().GetResult();
         var versions = versionsString.Split('\n');
         Console.WriteLine("Which game Version do you want to patch?");
-        Console.WriteLine("These versions are available: " + string.Join(",", versions));
+        Console.WriteLine("These versions are available: " + string.Join(", ", versions));
         for(; ; )
         {
             gameVersion = Console.ReadLine();

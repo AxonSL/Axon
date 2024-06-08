@@ -24,7 +24,7 @@ public class ExampleScript : AxonCustomScript
         }
     }
 
-    [AxonSyncVar(AxonSyncVarId.one,false)]
+    [AxonSyncVar(AxonSyncVarId.one, false)]
     public string myField;
 
     protected override void WriteSyncVar(AxonSyncVarId syncVarId, NetworkWriter writer)

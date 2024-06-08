@@ -97,4 +97,13 @@ public abstract class AxonCustomScript : MonoBehaviour
         }
         NetworkReaderPool.Return(reader);
     }
+
+    [HideFromIl2Cpp]
+    internal void ReadAllSyncVar(NetworkReader reader)
+    {
+        foreach(var sync in SyncVars.Keys)
+        {
+            ReadSyncVar(sync, reader);
+        }
+    }
 }

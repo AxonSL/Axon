@@ -26,6 +26,7 @@ public class SpawnAssetMessage : Il2CppSystem.Object //NetworkMessage
     public Quaternion rotation;
     public Vector3 scale;
     public string[] components;
+    public Il2CppSystem.ArraySegment<byte> componetsData;
 }
 
 public class SpawnAssetMessageHelper : CustomNetworkMessageHelper<SpawnAssetMessage>
@@ -47,6 +48,7 @@ public class SpawnAssetMessageHelper : CustomNetworkMessageHelper<SpawnAssetMess
             rotation = reader.ReadQuaternion(),
             scale = reader.ReadVector3(),
             components = reader.ReadString().Split(':'),
+            componetsData = reader.ReadArraySegmentAndSize(),
         };
         return msg;
     }
@@ -61,5 +63,6 @@ public class SpawnAssetMessageHelper : CustomNetworkMessageHelper<SpawnAssetMess
         writer.WriteQuaternion(message.rotation);
         writer.WriteVector3(message.scale);
         writer.WriteString(string.Join(":", message.components));
+        writer.WriteArraySegmentAndSize(message.componetsData);
     }
 }

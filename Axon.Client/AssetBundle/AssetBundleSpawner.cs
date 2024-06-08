@@ -8,6 +8,7 @@ using Axon.Shared.Meta;
 using Axon.Client.AssetBundle.CustomScript;
 using Il2CppInterop.Runtime;
 using Il2CppGameCore;
+using Il2CppMirror;
 
 namespace Axon.Client.AssetBundle;
 
@@ -137,6 +138,33 @@ public static class AssetBundleSpawner
             var customComp = obj.AddComponent(t).Cast<AxonCustomScript>();
             customComp.AxonAssetScript = spawned.Script;
             customComp.UniqueName = component;
+        }
+
+        if (message.componetsData.Count > 0)
+            ApplySyncVars(message, obj);
+    }
+
+    internal static void ApplySyncVars(SpawnAssetMessage message, GameObject gameObject)
+    {
+        var reader = NetworkReaderPool.Get(message.componetsData);
+        var count = reader.ReadUShort();
+
+        for(var i = 0; i < count; i++)
+        {
+            var compName = reader.ReadString();
+            if(!CustomComponents.TryGetValue(compName, out var compType))
+            {
+                MelonLogger.Warning("Server tried to update a SyncVar of a component that is not registered client side");
+                break;
+            }
+
+            var component = gameObject?.GetComponent(compType)?.Cast<AxonCustomScript>();
+            if(component == null)
+            {
+                MelonLogger.Warning("Server tried to update a SyncVar of a component it forgot to add to the gameobject?");
+                break;
+            }
+            component.ReadAllSyncVar(reader);
         }
     }
 
