@@ -6,10 +6,13 @@ namespace Axon.Client.Event.Handlers;
 
 public static class MenuHandler
 {
-    public static EventReactor<CreditHookEventArg> CreditsHook { get; } = new EventReactor<CreditHookEventArg>();
+    public static EventReactor<CreditHookEventArg> CreditsHook { get; } = new();
+
+    public static EventReactor<CanvasReadyEventArg> CanvasReady { get; } = new();
 
     internal static void Init()
     {
         EventManager.RegisterEvent(CreditsHook);
+        EventManager.RegisterEvent(CanvasReady);
     }
 }

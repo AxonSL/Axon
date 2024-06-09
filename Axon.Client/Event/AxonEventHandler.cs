@@ -1,7 +1,11 @@
-﻿using Axon.Client.Components;
+﻿using Axon.Client.AssetBundle;
+using Axon.Client.Components;
+using Axon.Client.Event.Args;
 using Axon.Shared.Event;
 using Axon.Shared.Meta;
 using MelonLoader;
+using UnityEngine.UI;
+using UnityEngine;
 
 namespace Axon.Client.Event;
 
@@ -29,5 +33,25 @@ public class AxonEventHandler : EventListener
         component.CreateCreditsEntry("Lava Gang", "MelonLoader", "Axon Client - Honorable Mentions", CreditColors.Yellow);
         component.CreateCreditsEntry("Pardeike", "HarmonyX", "Axon Client - Honorable Mentions", CreditColors.Yellow);
         component.CreateCreditsEntry("ModdedMcPlayer", "GameAssembly Patch Support", "Axon Client - Honorable Mentions", CreditColors.Yellow);
+    }
+
+    [EventHandler]
+    public void OnRoundRestart(RoundRestartEventArg _)
+    {
+        AssetBundleSpawner.SpawnedAssets = new(new List<SpawnedAsset>());
+    }
+
+    [EventHandler]
+    public void OnCanvasReady(CanvasReadyEventArg _)
+    {
+        var texture = new Texture2D(600, 600);
+        ImageConversion.LoadImage(texture, File.ReadAllBytes("axon.png"));
+        GameObject.Find("Canvas/Logo").GetComponent<RawImage>().texture = texture;
+
+        var text = GameObject.Find("Canvas/Version").GetComponent<Text>();
+        var gameVersion = text.text;
+        text.text = "Axon Version: " + AxonMod.AxonVersion + " Game Version: " + gameVersion;
+
+        AuthHandler.Init();
     }
 }

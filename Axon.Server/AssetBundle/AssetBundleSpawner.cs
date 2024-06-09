@@ -18,22 +18,51 @@ namespace Axon.Server.AssetBundle;
 public static class AssetBundleSpawner
 {
     private static uint _counter = 0;
-
     public static string AssetBundlesPath { get; private set; }
 
     public static ReadOnlyDictionary<string, UnityAssetBundle> AssetBundles { get; private set; } = new(new Dictionary<string, UnityAssetBundle>());
     public static ReadOnlyCollection<SpawnedAsset> SpawnedAssets { get; private set; } = new(new List<SpawnedAsset>());
     public static ReadOnlyDictionary<string, Type> CustomComponents { get; private set; } = new(new Dictionary<string, Type>());
 
-    private static void OnMeta(MetaEvent ev)
+
+    public static AxonAssetScript SpawnAsset(string bundle, string asset, string gameObjectName = "Axon Asset", params string[] components)
+    => SpawnAsset(bundle, asset, gameObjectName, Vector3.zero, Quaternion.identity, Vector3.one, components);
+
+    public static AxonAssetScript SpawnAsset(string bundle, string asset, string gameObjectName, Vector3 position, params string[] components)
+        => SpawnAsset(bundle, asset, gameObjectName, position, Quaternion.identity, Vector3.one, components);
+
+    public static AxonAssetScript SpawnAsset(string bundle, string asset, string gameObjectName, Vector3 position, Quaternion rotation, params string[] components)
+        => SpawnAsset(bundle, asset, gameObjectName, position, rotation, Vector3.one, components);
+
+    public static AxonAssetScript SpawnAsset(string bundle, string asset, string gameObjectName, Vector3 position, Quaternion rotation, Vector3 scale, params string[] components)
     {
-        if (!ev.Is<AxonCustomScript>()) return;
-        var attribute = ev.GetAttribute<AxonScriptAttribute>();
-        if(attribute == null) return;
-        var dic = new Dictionary<string, Type>(CustomComponents);
-        dic[attribute.UniqueName] = ev.Type;
-        CustomComponents = new(dic);
+        GameObject obj;
+        if (bundle == "default" && asset == "empty")
+        {
+            obj = new GameObject();
+        }
+        else
+        {
+            if (!AssetBundles.TryGetValue(bundle, out var assetBundle))
+            {
+                Log.Warn("Server tried to spawn a Bundle that isn't installed: " + bundle);
+                return null;
+            }
+
+            if (!assetBundle.GetAllAssetNames().Contains(asset.ToLower()))
+            {
+                Log.Warn($"Server tried to spawn the Asset {asset} from the bundle {bundle}, but it is not part of the bundle");
+                return null;
+            }
+
+            var prefab = assetBundle.LoadAsset<GameObject>(asset.ToLower());
+            obj = UnityEngine.Object.Instantiate(prefab);
+        }
+        var comp = SpawnGameObject(obj, bundle, asset, gameObjectName, position, rotation, scale, components);
+        return comp;
     }
+
+
 
     internal static void Init()
     {
@@ -83,7 +112,7 @@ public static class AssetBundleSpawner
 
             msg.componetsData = writer.ToArraySegment();
             ev.Player.Connection.Send(msg);
-            //TODO: Test if this works: NetworkWriterPool.Return(writer);
+            NetworkWriterPool.Return(writer);
         }
     }
 
@@ -133,39 +162,21 @@ public static class AssetBundleSpawner
     }
 
 
-    public static AxonAssetScript SpawnAsset(string bundle, string asset, string gameObjectName = "Axon Asset", params string[] components)
-        => SpawnAsset(bundle, asset, gameObjectName, Vector3.zero, Quaternion.identity, Vector3.one, components);
 
-    public static AxonAssetScript SpawnAsset(string bundle, string asset, string gameObjectName, Vector3 position, params string[] components)
-        => SpawnAsset(bundle, asset, gameObjectName, position, Quaternion.identity, Vector3.one, components);
 
-    public static AxonAssetScript SpawnAsset(string bundle, string asset, string gameObjectName, Vector3 position, Quaternion rotation, params string[] components)
-        => SpawnAsset(bundle, asset, gameObjectName, position, rotation, Vector3.one, components);
-
-    public static AxonAssetScript SpawnAsset(string bundle, string asset, string gameObjectName, Vector3 position, Quaternion rotation, Vector3 scale, params string[] components)
+    private static void OnMeta(MetaEvent ev)
     {
-        if (!AssetBundles.TryGetValue(bundle, out var assetBundle))
-        {
-            Log.Warn("Server tried to spawn a Bundle that isn't installed: " + bundle);
-            return null;
-        }
-
-        if (!assetBundle.GetAllAssetNames().Contains(asset.ToLower()))
-        {
-            Log.Warn($"Server tried to spawn the Asset {asset} from the bundle {bundle}, but it is not part of the bundle");
-            return null;
-        }
-
-        var prefab = assetBundle.LoadAsset<GameObject>(asset.ToLower());
-        var comp = SpawnGameObject(prefab, bundle, asset, gameObjectName, position, rotation, scale, components);
-        return comp;
+        if (!ev.Is<AxonCustomScript>()) return;
+        var attribute = ev.GetAttribute<AxonScriptAttribute>();
+        if (attribute == null) return;
+        var dic = new Dictionary<string, Type>(CustomComponents);
+        dic[attribute.UniqueName] = ev.Type;
+        CustomComponents = new(dic);
     }
 
-    //TODO: Send object Data again once someone new joins
-    private static AxonAssetScript SpawnGameObject(GameObject prefab, string bundle, string asset, string name, Vector3 position, Quaternion rotation, Vector3 scale, params string[] components)
+    private static AxonAssetScript SpawnGameObject(GameObject obj, string bundle, string asset, string name, Vector3 position, Quaternion rotation, Vector3 scale, params string[] components)
     {
-        //Create Gameobject
-        var obj = UnityEngine.Object.Instantiate(prefab);
+        //Setup Gameobject
         obj.name = name;
         obj.transform.position = position;
         obj.transform.rotation = rotation;

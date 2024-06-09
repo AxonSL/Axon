@@ -16,10 +16,13 @@ public static class AssetBundleSpawner
 {
     public const string AssetDirectoryName = "AssetBundles";
     public static string AssetDirectory { get; private set; }
+
     public static ReadOnlyDictionary<string, Il2CppAssetBundle> AssetBundles { get; private set; } = new(new Dictionary<string, Il2CppAssetBundle>());
-    //TODO: Clear this on RoundRestart
-    public static ReadOnlyCollection<SpawnedAsset> SpawnedAssets { get; private set; } = new (new List<SpawnedAsset>());
+    //TODO: Clear this on Disconnect
+    public static ReadOnlyCollection<SpawnedAsset> SpawnedAssets { get; internal set; } = new (new List<SpawnedAsset>());
     public static ReadOnlyDictionary<string, Il2CppSystem.Type> CustomComponents { get; private set; } = new(new Dictionary<string, Il2CppSystem.Type>());
+
+
 
     internal static void Init()
     {
@@ -31,6 +34,30 @@ public static class AssetBundleSpawner
             Directory.CreateDirectory(AssetDirectory);
 
         LoadAssets();
+    }
+
+    internal static void OnSpawnAssetMessage(SpawnAssetMessage message)
+    {
+        try
+        {
+            if (message.objectId == 0)
+            {
+                MelonLogger.Error("Server tried to spawn a Asset without a proper NetId. Object can't be spawned");
+                return;
+            }
+            var spawned = SpawnedAssets.FirstOrDefault(x => x.Id == message.objectId);
+            if (spawned != null && spawned.GameObject != null)
+            {
+                MelonLogger.Warning("Server tried to spawn an already existing object");
+                return;
+            }
+
+            CreateAsset(message);
+        }
+        catch (Exception e)
+        {
+            MelonLogger.Error(e);
+        }
     }
 
     internal static void OnSyncVarMessage(SyncVarMessage msg)
@@ -73,101 +100,6 @@ public static class AssetBundleSpawner
         }
     }
 
-    internal static void OnSpawnAssetMessage(SpawnAssetMessage message)
-    {
-        try
-        {
-            if (message.objectId == 0)
-            {
-                MelonLogger.Error("Server tried to spawn a Asset without a proper NetId. Object can't be spawned");
-                return;
-            }
-            var spawned = SpawnedAssets.FirstOrDefault(x => x.Id == message.objectId);
-            if (spawned != null && spawned.GameObject != null)
-            {
-                MelonLogger.Warning("Server tried to spawn an already existing object");
-                return;
-            }
-
-            CreateAsset(message);
-        }
-        catch (Exception e)
-        {
-            MelonLogger.Error(e);
-        }
-    }
-
-    private static void CreateAsset(SpawnAssetMessage message)
-    {
-        MelonLogger.Msg("Loading Asset with objectID: " + message.objectId);
-
-        if (!AssetBundles.TryGetValue(message.bundleName, out var bundle)) 
-        {
-            MelonLogger.Error("Server tried to spawn a Asset from an not installed bundle");
-            return;
-        }
-
-        var asset = bundle.LoadAsset<GameObject>(message.assetName);
-        var obj = Object.Instantiate(asset);
-        obj.name = message.gameObjectName;
-        obj.transform.position = message.position;
-        obj.transform.rotation = message.rotation;
-        obj.transform.localScale = message.scale;
-
-        var list = new List<SpawnedAsset>();
-        var spawned = new SpawnedAsset
-        {
-            Id = message.objectId,
-            GameObject = obj,
-            Bundle = message.bundleName,
-            AssetName = message.assetName,
-            Components = message.components,
-        };
-        spawned.Script = obj.AddComponent<AxonAssetScript>();
-        spawned.Script.SpawnedAsset = spawned;
-        list.Add(spawned);
-        SpawnedAssets = new(list);
-        foreach(var component in message.components)
-        {
-            if (!CustomComponents.ContainsKey(component))
-            {
-                MelonLogger.Warning("Server tried to add a component that isn't registered client side: " + component);
-                return;
-            }
-            var t = CustomComponents[component];
-            var customComp = obj.AddComponent(t).Cast<AxonCustomScript>();
-            customComp.AxonAssetScript = spawned.Script;
-            customComp.UniqueName = component;
-        }
-
-        if (message.componetsData.Count > 0)
-            ApplySyncVars(message, obj);
-    }
-
-    internal static void ApplySyncVars(SpawnAssetMessage message, GameObject gameObject)
-    {
-        var reader = NetworkReaderPool.Get(message.componetsData);
-        var count = reader.ReadUShort();
-
-        for(var i = 0; i < count; i++)
-        {
-            var compName = reader.ReadString();
-            if(!CustomComponents.TryGetValue(compName, out var compType))
-            {
-                MelonLogger.Warning("Server tried to update a SyncVar of a component that is not registered client side");
-                break;
-            }
-
-            var component = gameObject?.GetComponent(compType)?.Cast<AxonCustomScript>();
-            if(component == null)
-            {
-                MelonLogger.Warning("Server tried to update a SyncVar of a component it forgot to add to the gameobject?");
-                break;
-            }
-            component.ReadAllSyncVar(reader);
-        }
-    }
-
     internal static void UpdateAsset(UpdateAssetMessage message)
     {
         try
@@ -198,6 +130,8 @@ public static class AssetBundleSpawner
         }
     }
 
+
+
     private static void OnMeta(MetaEvent ev)
     {
         if (!ev.Is<AxonCustomScript>()) return;
@@ -206,6 +140,91 @@ public static class AssetBundleSpawner
         var dic = new Dictionary<string, Il2CppSystem.Type>(CustomComponents);
         dic[attribute.UniqueName] = Il2CppType.From(ev.Type);
         CustomComponents = new(dic);
+    }
+
+    private static void CreateAsset(SpawnAssetMessage message)
+    {
+        MelonLogger.Msg("Loading Asset with objectID: " + message.objectId);
+        GameObject obj;
+
+        if(message.bundleName == "default" && message.assetName == "empty")
+        {
+            obj = new GameObject();
+        }
+        else
+        {
+            if (!AssetBundles.TryGetValue(message.bundleName, out var bundle))
+            {
+                MelonLogger.Warning("Server tried to spawn a Asset from an not installed bundle");
+                return;
+            }
+
+            if (!bundle.GetAllAssetNames().Contains(message.assetName.ToLower()))
+            {
+                MelonLogger.Warning($"Server tried to spawn the Asset {message.assetName} from the bundle {message.bundleName}, but it is not part of the bundle");
+                return;
+            }
+
+            var asset = bundle.LoadAsset<GameObject>(message.assetName);
+            obj = Object.Instantiate(asset);
+        }
+        obj.name = message.gameObjectName;
+        obj.transform.position = message.position;
+        obj.transform.rotation = message.rotation;
+        obj.transform.localScale = message.scale;
+
+        var list = new List<SpawnedAsset>();
+        var spawned = new SpawnedAsset
+        {
+            Id = message.objectId,
+            GameObject = obj,
+            Bundle = message.bundleName,
+            AssetName = message.assetName,
+            Components = message.components,
+        };
+        spawned.Script = obj.AddComponent<AxonAssetScript>();
+        spawned.Script.SpawnedAsset = spawned;
+        list.Add(spawned);
+        SpawnedAssets = new(list);
+        foreach (var component in message.components)
+        {
+            if (!CustomComponents.ContainsKey(component))
+            {
+                MelonLogger.Warning("Server tried to add a component that isn't registered client side: " + component);
+                return;
+            }
+            var t = CustomComponents[component];
+            var customComp = obj.AddComponent(t).Cast<AxonCustomScript>();
+            customComp.AxonAssetScript = spawned.Script;
+            customComp.UniqueName = component;
+        }
+
+        if (message.componetsData.Count > 0)
+            ApplySyncVars(message, obj);
+    }
+
+    private static void ApplySyncVars(SpawnAssetMessage message, GameObject gameObject)
+    {
+        var reader = NetworkReaderPool.Get(message.componetsData);
+        var count = reader.ReadUShort();
+
+        for (var i = 0; i < count; i++)
+        {
+            var compName = reader.ReadString();
+            if (!CustomComponents.TryGetValue(compName, out var compType))
+            {
+                MelonLogger.Warning("Server tried to update a SyncVar of a component that is not registered client side");
+                break;
+            }
+
+            var component = gameObject?.GetComponent(compType)?.Cast<AxonCustomScript>();
+            if (component == null)
+            {
+                MelonLogger.Warning("Server tried to update a SyncVar of a component it forgot to add to the gameobject?");
+                break;
+            }
+            component.ReadAllSyncVar(reader);
+        }
     }
 
     private static void LoadAssets()

@@ -42,6 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auth\AuthUtility.cs" />
+    <Compile Include="Auth\PlayerAuth.cs" />
+    <Compile Include="Auth\RsaService.cs" />
     <Compile Include="CustomScripts\AxonScriptAttribute.cs" />
     <Compile Include="CustomScripts\AxonSyncVarAttribute.cs" />
     <Compile Include="CustomScripts\AxonSyncVarId.cs" />

@@ -6,6 +6,7 @@ using Axon.Client.Event.Args;
 using Axon.Client.Event.Handlers;
 using Axon.Client.NetworkMessages;
 using Axon.Shared;
+using Axon.Shared.Auth;
 using Axon.Shared.CustomScripts;
 using Axon.Shared.Event;
 using Axon.Shared.Meta;

@@ -14,6 +14,7 @@ using Axon.Server.Event;
 using Axon.Shared.Event;
 using Axon.Shared.Meta;
 using Axon.Server.AssetBundle.CustomScript;
+using HarmonyLib;
 
 namespace Axon.Server;
 
@@ -23,12 +24,14 @@ public class AxonPlugin : Plugin<AxonConfig>
     public override string Name => "Axon server plugin";
     public override PluginPriority Priority => PluginPriority.Higher;
     public override Version Version => new Version(0, 0, 1);
+    public Harmony Harmony { get; }
 
     public static AxonPlugin Instance { get; private set; }
 
     public AxonPlugin()
     {
         ShareMain.Init();
+        Harmony = new Harmony("Axon.Server");
     }
 
     public override void OnEnabled()
@@ -39,12 +42,14 @@ public class AxonPlugin : Plugin<AxonConfig>
         MessageHandler.Init();
         AssetBundleSpawner.Init();
         MetaAnalyzer.Analyze();
+        Harmony.PatchAll();
         base.OnEnabled();
     }
 
     public override void OnDisabled()
     {
         UnHookEvents();
+        Harmony.UnpatchAll();
         base.OnDisabled();
     }
 
@@ -74,6 +79,7 @@ public class AxonPlugin : Plugin<AxonConfig>
 
     private void OnRoundStart()
     {
+        AssetBundleSpawner.SpawnAsset("default", "empty", "AxonHandler", "Axon.AxonHandlerScript").GetComponent<AxonHandlerScript>().Test = 10;
         foreach (var player in ReferenceHub.AllHubs)
         {
             if (player.IsHost) continue;
