@@ -87,9 +87,6 @@ public static class ProcessConnectionRequest
                     CustomLiteNetLib4MirrorTransport.RequestWriter.PutBytesWithLength(encrypted);
                     request.RejectForce(CustomLiteNetLib4MirrorTransport.RequestWriter);
 
-                    CustomLiteNetLib4MirrorTransport.RequestWriter.Put((byte)RejectionReason.Custom);
-                    CustomLiteNetLib4MirrorTransport.RequestWriter.Put("Challenge decrypted please try to join again");
-
                     Log.Info("User: " + name + " tried to authenticate using this userId: " + userId + ". Validating Key...");
                     return false;
 

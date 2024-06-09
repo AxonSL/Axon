@@ -12,6 +12,8 @@ using System.Xml.Serialization;
 using System.Reflection.Metadata;
 using Il2CppLiteNetLib.Utils;
 using Il2CppLiteNetLib;
+using System.Collections;
+using UnityEngine;
 
 namespace Axon.Client;
 
@@ -86,6 +88,14 @@ public static class AuthHandler
         var decrypted = RsaService.Decript(encrypted);
         var server = CustomLiteNetLib4MirrorTransport.Singleton.clientAddress;
         _decrypted[server] = decrypted;
+
+        MelonLoader.MelonCoroutines.Start(ConnectAgain(server, CustomLiteNetLib4MirrorTransport.Singleton.port.ToString()));
+    }
+
+    private static IEnumerator ConnectAgain(string ip,string port)
+    {
+        yield return null;
+        Il2CppGameCore.Console.singleton.TypeCommand("connect " + ip + ":" + port);
     }
 
     private static void CreateNew()

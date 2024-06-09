@@ -9,6 +9,7 @@ using Il2Cpp;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Il2CppLiteNetLib;
 using Il2CppLiteNetLib.Utils;
+using Il2CppMirror.LiteNetLib4Mirror;
 using MelonLoader;
 using static Il2CppSystem.Globalization.CultureInfo;
 
