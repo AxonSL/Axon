@@ -15,6 +15,7 @@ using Axon.Shared.Event;
 using Axon.Shared.Meta;
 using Axon.Server.AssetBundle.CustomScript;
 using HarmonyLib;
+using CentralAuth;
 
 namespace Axon.Server;
 
@@ -36,6 +37,7 @@ public class AxonPlugin : Plugin<AxonConfig>
 
     public override void OnEnabled()
     {
+        PlayerAuthenticationManager.OnlineMode = false;
         Instance = this;
 
         HookEvents();

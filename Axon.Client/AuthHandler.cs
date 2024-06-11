@@ -94,7 +94,7 @@ public static class AuthHandler
 
     private static IEnumerator ConnectAgain(string ip,string port)
     {
-        yield return null;
+        yield return new WaitForSeconds(2);
         Il2CppGameCore.Console.singleton.TypeCommand("connect " + ip + ":" + port);
     }
 

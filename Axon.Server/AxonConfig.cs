@@ -11,4 +11,6 @@ public class AxonConfig : IConfig
 {
     public bool IsEnabled { get; set; } = true;
     public bool Debug { get; set; } = false;
+    public string Token { get; set; }
+    public string Server { get; set; }
 }
