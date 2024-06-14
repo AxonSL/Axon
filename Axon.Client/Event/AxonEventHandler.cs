@@ -6,12 +6,26 @@ using Axon.Shared.Meta;
 using MelonLoader;
 using UnityEngine.UI;
 using UnityEngine;
+using Axon.Client.API.Features;
+using UnityEngine.SceneManagement;
+using Axon.Client.Event.Handlers;
 
 namespace Axon.Client.Event;
 
 [Automatic]
 public class AxonEventHandler : EventListener
 {
+    public AxonEventHandler()
+    {
+        SceneManager.add_sceneLoaded(new System.Action<Scene, LoadSceneMode>(OnSceneLoaded));
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        var ev = new SceneLoadedEventArg(scene, mode);
+        UnityHandler.SceneLoaded.Raise(ev);
+    }
+
     [EventHandler]
     public void OnHookCredits(Axon.Client.Event.Args.CreditHookEventArg ev)
     {
@@ -39,6 +53,8 @@ public class AxonEventHandler : EventListener
     public void OnRoundRestart(RoundRestartEventArg _)
     {
         AssetBundleSpawner.SpawnedAssets = new(new List<SpawnedAsset>());
+        Player.PlayerList = new(new List<Player>());
+        Player.GameObjectToPlayer = new(new Dictionary<GameObject, Player>());
     }
 
     [EventHandler]

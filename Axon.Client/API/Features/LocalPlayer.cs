@@ -6,14 +6,24 @@ namespace Axon.Client.API.Features;
 
 public class LocalPlayer : Player
 {
-    private static LocalPlayer _instance = new LocalPlayer();
-    public static LocalPlayer Get()
+    private static LocalPlayer _localPlayer;
+
+    public LocalPlayer(ReferenceHub hub) : base(hub) { }
+    public LocalPlayer(GameObject obj) : base(obj) { }
+
+    public static LocalPlayer Instance
     {
-        return _instance;
+        get
+        {
+            if(_localPlayer?.ReferenceHub == null)
+            {
+                _localPlayer = new LocalPlayer(ReferenceHub.LocalHub);
+            }
+
+            return _localPlayer;
+        }
     }
-    public LocalPlayer()
-    {
-        ReferenceHub = ReferenceHub.LocalHub;
-    }
+    
+
     public Camera Camera => ReferenceHub.PlayerCameraReference.gameObject.GetComponent<Camera>();
 }

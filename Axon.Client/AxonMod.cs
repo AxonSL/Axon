@@ -13,6 +13,8 @@ using Axon.Shared.Meta;
 using Il2Cpp;
 using Il2CppInterop.Runtime.Injection;
 using MelonLoader;
+using System.Collections;
+using UnityEngine;
 using CommandHandler = Axon.Client.Command.CommandHandler;
 
 [assembly: MelonInfo(typeof(AxonMod), "Axon", "0.1.0", "Dimenzio & Tiliboyy")]
@@ -37,6 +39,7 @@ public class AxonMod : MelonMod
         MessageHandler.Init();
         AssetBundleSpawner.Init();
 
+        UnityHandler.Init();
         MenuHandler.Init();
         RoundHandler.Init();
         
