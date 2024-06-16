@@ -52,6 +52,7 @@ public static class AuthHandler
             isSecondTime = true;
         }
 
+        //Writes the Game Version
         writer.Put((byte)(isSecondTime ? 4 : 3));
         writer.Put(Il2CppGameCore.Version.Major);
         writer.Put(Il2CppGameCore.Version.Minor);
@@ -59,6 +60,9 @@ public static class AuthHandler
         writer.Put(Il2CppGameCore.Version.BackwardCompatibility);
         if (Il2CppGameCore.Version.BackwardCompatibility)
             writer.Put(Il2CppGameCore.Version.BackwardRevision);
+
+        //Writes how long this Request is valid
+        writer.Put(TimeBehaviour.CurrentUnixTimestamp + 30);
 
 
         writer.PutBytesWithLength(PlayerAuth.Key.Exponent);

@@ -13,6 +13,6 @@ public static class AuthUtility
     {
         var sha = SHA256.Create();
         var hash = sha.ComputeHash(parameters.Modulus);
-        return Convert.ToBase64String(hash)+"@Axon";
+        return Convert.ToBase64String(hash)+"@axon";
     }
 }
