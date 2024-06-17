@@ -25,9 +25,6 @@
     <Reference Include="BouncyCastle.Cryptography">
       <HintPath>Refs\BouncyCastle.Cryptography.dll</HintPath>
     </Reference>
-    <Reference Include="Il2CppBouncyCastle.Cryptography">
-      <HintPath>Refs\Il2CppBouncyCastle.Cryptography.dll</HintPath>
-    </Reference>
     <Reference Include="Il2CppCommandSystem.Core">
       <HintPath>Refs\Il2CppCommandSystem.Core.dll</HintPath>
     </Reference>

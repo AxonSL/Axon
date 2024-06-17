@@ -20,9 +20,6 @@ namespace Axon.Server.Patches.Mirror;
 [HarmonyPatch(typeof(CustomLiteNetLib4MirrorTransport), nameof(CustomLiteNetLib4MirrorTransport.ProcessConnectionRequest))]
 public static class ProcessConnectionRequestPatch
 {
-    public static Dictionary<string, byte[]> Requests = new Dictionary<string, byte[]>();
-    public static Dictionary<IPEndPoint, VerifiedPlayer> VerifiedPlayers = new();
-
     [HarmonyPrefix]
     public static bool OnConnectionRequest(ConnectionRequest request)
     {
@@ -129,10 +126,7 @@ public static class ProcessConnectionRequestPatch
             #endregion
 
             #region AxonAuth
-            if (!request.Data.TryGetBytesWithLength(out var exponent)
-                        || !request.Data.TryGetBytesWithLength(out var pubKeyData)
-                        || !request.Data.TryGetString(out var userId)
-                        || !request.Data.TryGetString(out var name))
+            if(!request.Data.TryGetBytesWithLength(out var authData))
             {
                 RequestWriter.Reset();
                 RequestWriter.Put(4);
@@ -140,57 +134,65 @@ public static class ProcessConnectionRequestPatch
                 return false;
             }
 
-            var key = new RSAParameters()
-            {
-                Exponent = exponent,
-                Modulus = pubKeyData
-            };
-            if (!string.Equals(userId, AuthUtility.GetUserIdFromPub(key)))
-            {
-                RequestWriter.Reset();
-                RequestWriter.Put((byte)RejectionReason.VerificationRejected);
-                request.RejectForce(RequestWriter);
-                return false;
-            }
+            var userId = string.Empty;
+            var name = string.Empty;
 
-            var service = new RsaService(key);
             switch (requestType)
             {
                 case 3:
-                    var randomData = RandomGenerator.GetBytes(20, true);
-                    Requests[userId] = randomData;
-                    var encrypted = service.Encript(randomData);
+                    var serverEnv = ServerAuthSession.Generate();
+                    var clientHandshake = ClientHandshake.Decode(authData);
+                    userId = clientHandshake.GetUserId();
+                    var serverIden = AuthHandler.AddConnection(serverEnv, clientHandshake);
 
                     RequestWriter.Reset();
                     RequestWriter.Put((byte)100);
-                    RequestWriter.PutBytesWithLength(encrypted);
+                    RequestWriter.PutBytesWithLength(serverEnv.CreateHandshake().Encode());
+                    RequestWriter.Put(serverIden);
                     request.RejectForce(RequestWriter);
 
-                    Exiled.API.Features.Log.Debug("User: " + name + " tried to authenticate using this userId: " + userId + ". Validating Key...");
+                    Exiled.API.Features.Log.Debug("Got Handshake from user " + userId + " from ip " + ip);
                     CustomLiteNetLib4MirrorTransport.PreauthDisableIdleMode();
                     return false;
 
                 case 4:
-                    if(!Requests.TryGetValue(userId, out var data) || !request.Data.TryGetBytesWithLength(out var sendedData))
+                    var attempt = ClientLoginAttempt.Decode(authData);
+
+                    if (!request.Data.TryGetString(out var serverIdentifier))
                     {
-                        Requests.Remove(userId);
                         RequestWriter.Reset();
-                        RequestWriter.Put(19);
+                        RequestWriter.Put(4);
                         request.RejectForce(RequestWriter);
                         return false;
                     }
 
-                    if (!data.SequenceEqual(sendedData))
+                    if(!AuthHandler._connections.TryGetValue(serverIdentifier,out var connection))
                     {
-                        Requests.Remove(userId);
                         RequestWriter.Reset();
-                        RequestWriter.Put(19);
+                        RequestWriter.Put(4);
                         request.RejectForce(RequestWriter);
                         return false;
                     }
 
-                    Requests.Remove(userId);
-                    Exiled.API.Features.Log.Debug("Verified Key from user: " + name + " with userid: " + userId);
+                    if (!connection.ServerEnv.Validate(connection.Handshake, attempt))
+                    {
+                        RequestWriter.Reset();
+                        RequestWriter.Put((byte)RejectionReason.InvalidToken);
+                        request.RejectForce(RequestWriter);
+                    }
+                    AuthHandler._connections.Remove(serverIdentifier);
+
+                    if (!request.Data.TryGetString(out name))
+                    {
+                        RequestWriter.Reset();
+                        RequestWriter.Put(4);
+                        request.RejectForce(RequestWriter);
+                        return false;
+                    }
+
+                    userId = connection.Handshake.GetUserId();
+
+                    Exiled.API.Features.Log.Debug($"Verified {name}({userId}) - " + ip);
                     break;
 
                 default:
@@ -334,10 +336,10 @@ public static class ProcessConnectionRequestPatch
             CustomLiteNetLib4MirrorTransport.PreauthDisableIdleMode();
             #endregion
 
-            VerifiedPlayers[request.RemoteEndPoint] = new VerifiedPlayer
+            AuthHandler._storedPlayers[request.RemoteEndPoint] = new Server.Auth.PlayerStorage
             {
-                Name = name,
-                UserId = userId,
+                NickName = name,
+                UserId = userId
             };
             return false;
         }
@@ -386,10 +388,4 @@ public static class ProcessConnectionRequestPatch
 
         return false;
     }
-}
-
-public class VerifiedPlayer
-{
-    public string Name { get; set; }
-    public string UserId {  get; set; }
 }

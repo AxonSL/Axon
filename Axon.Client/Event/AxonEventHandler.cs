@@ -9,6 +9,7 @@ using UnityEngine;
 using Axon.Client.API.Features;
 using UnityEngine.SceneManagement;
 using Axon.Client.Event.Handlers;
+using Axon.Client.Auth;
 
 namespace Axon.Client.Event;
 

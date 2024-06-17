@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Axon.Client.Auth;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;

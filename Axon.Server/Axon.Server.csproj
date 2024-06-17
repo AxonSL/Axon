@@ -114,6 +114,9 @@
     <Compile Include="AssetBundle\CustomScript\AxonHandlerScript.cs" />
     <Compile Include="AssetBundle\CustomScript\ExampleScript.cs" />
     <Compile Include="AssetBundle\SpawnedAsset.cs" />
+    <Compile Include="Auth\AuthHandler.cs" />
+    <Compile Include="Auth\Connection.cs" />
+    <Compile Include="Auth\PlayerStorage.cs" />
     <Compile Include="AxonConfig.cs" />
     <Compile Include="AxonPlugin.cs" />
     <Compile Include="AssetBundle\AxonAssetScript.cs" />
@@ -121,7 +124,6 @@
     <Compile Include="Event\EventMessageId.cs" />
     <Compile Include="Event\RoundEventHandler.cs" />
     <Compile Include="NetworkMessages\AxonMessages\EventMessage.cs" />
-    <Compile Include="NetworkMessages\AxonMessages\PostJoinAuthMessage.cs" />
     <Compile Include="NetworkMessages\AxonMessages\SpawnAssetMessage.cs" />
     <Compile Include="NetworkMessages\AxonMessages\SyncVarMessage.cs" />
     <Compile Include="NetworkMessages\AxonMessages\UpdateAssetMessage.cs" />

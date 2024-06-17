@@ -44,11 +44,6 @@ public static class MessageHandler
         Writer<SyncVarMessage>.write = WriteSyncVarMessage;
         Reader<SyncVarMessage>.read = ReadSyncVarMessage;
         NetworkServer.RegisterHandler<SyncVarMessage>(OnSyncVarMessage);
-
-        //PostJoinAuthMessage
-        Writer<PostJoinAuthMessage>.write = WritePostAuth;
-        Reader<PostJoinAuthMessage>.read = ReadPostAuth;
-        NetworkServer.RegisterHandler<PostJoinAuthMessage>(PostAuthMessage);
     }
 
     #region TestMessage
@@ -198,42 +193,6 @@ public static class MessageHandler
     {
         message.connection = connection;
         AssetBundleSpawner.OnSyncVarMessage(message);
-    }
-    #endregion
-
-    #region PostAuthJoinMessage
-    private static void WritePostAuth(NetworkWriter writer, PostJoinAuthMessage message)
-    {
-        writer.WriteBool(message.ServerRequestAuth);
-        writer.WriteString(message.PublicKey);
-        if (!message.ServerRequestAuth)
-        {
-            writer.WriteString(message.NickName);
-        }
-    }
-
-    private static PostJoinAuthMessage ReadPostAuth(NetworkReader reader)
-    {
-        var msg = new PostJoinAuthMessage()
-        {
-            ServerRequestAuth = reader.ReadBool(),
-            PublicKey = reader.ReadString(),
-        };
-        if (!msg.ServerRequestAuth)
-        {
-            msg.NickName = reader.ReadString();
-        }
-        return msg;
-    }
-
-    private static void PostAuthMessage(NetworkConnection connection, PostJoinAuthMessage message)
-    {
-        if (message.NickName == null || message.PublicKey == null) return;
-        if (!ReferenceHub.TryGetHub(connection.identity.gameObject, out var hub)) return;
-        hub.encryptedChannelManager.ServerProcessExchange(message.PublicKey);
-        hub.nicknameSync.UpdateNickname(message.NickName);
-        hub.serverRoles.RefreshPermissions(false);
-        Exiled.Events.Patches.Events.Player.Verified.Postfix(hub.authManager);
     }
     #endregion
 }

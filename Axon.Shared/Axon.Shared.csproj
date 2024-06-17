@@ -45,10 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Auth\AuthUtility.cs" />
-    <Compile Include="Auth\Packages.cs" />
-    <Compile Include="Auth\PlayerAuth.cs" />
-    <Compile Include="Auth\RsaService.cs" />
+    <Compile Include="Auth\ClientAuthSession.cs" />
+    <Compile Include="Auth\ClientHandshake.cs" />
+    <Compile Include="Auth\ClientLoginAttempt.cs" />
+    <Compile Include="Auth\AuthCrypto.cs" />
+    <Compile Include="Auth\ServerAuthSession.cs" />
+    <Compile Include="Auth\ServerHandshake.cs" />
     <Compile Include="CustomScripts\AxonScriptAttribute.cs" />
     <Compile Include="CustomScripts\AxonSyncVarAttribute.cs" />
     <Compile Include="CustomScripts\AxonSyncVarId.cs" />
