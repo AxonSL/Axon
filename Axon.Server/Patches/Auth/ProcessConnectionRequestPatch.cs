@@ -250,7 +250,7 @@ public static class ProcessConnectionRequestPatch
             #endregion
 
             #region Whitelist
-            if (!WhiteList.IsWhitelisted(userId))
+            if (ServerConsole.WhiteListEnabled && !WhiteList.IsWhitelisted(userId))
             {
                 if (CustomLiteNetLib4MirrorTransport.DisplayPreauthLogs)
                 {

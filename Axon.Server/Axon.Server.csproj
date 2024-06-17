@@ -62,8 +62,8 @@
     <Reference Include="Exiled.CustomRoles, Version=8.9.2.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\EXILED.8.9.2\lib\net48\Exiled.CustomRoles.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Events, Version=8.9.2.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.8.9.2\lib\net48\Exiled.Events.dll</HintPath>
+    <Reference Include="Exiled.Events_publicized">
+      <HintPath>Refs\Exiled.Events_publicized.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Loader, Version=8.9.2.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\EXILED.8.9.2\lib\net48\Exiled.Loader.dll</HintPath>
@@ -121,6 +121,7 @@
     <Compile Include="Event\EventMessageId.cs" />
     <Compile Include="Event\RoundEventHandler.cs" />
     <Compile Include="NetworkMessages\AxonMessages\EventMessage.cs" />
+    <Compile Include="NetworkMessages\AxonMessages\PostJoinAuthMessage.cs" />
     <Compile Include="NetworkMessages\AxonMessages\SpawnAssetMessage.cs" />
     <Compile Include="NetworkMessages\AxonMessages\SyncVarMessage.cs" />
     <Compile Include="NetworkMessages\AxonMessages\UpdateAssetMessage.cs" />

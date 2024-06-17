@@ -22,6 +22,9 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>Refs\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
+    <Reference Include="Il2CppBouncyCastle.Cryptography">
+      <HintPath>Refs\Il2CppBouncyCastle.Cryptography.dll</HintPath>
+    </Reference>
     <Reference Include="Il2CppCommandSystem.Core">
       <HintPath>Refs\Il2CppCommandSystem.Core.dll</HintPath>
     </Reference>
