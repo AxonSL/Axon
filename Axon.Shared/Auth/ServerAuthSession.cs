@@ -36,8 +36,8 @@ public class ServerAuthSession
         Array.Copy(handshake.nonce, 0, buf, 0, 12);
         Array.Copy(challenge, 0, buf, 12, 20);
         var sharedSecret = AuthCrypto.ComputeSharedSecret(sessionKeyPair, handshake.sessionPublic);
-        var signature = AuthCrypto.AesDecrypt(sharedSecret, new byte[12], attempt.signature);
+        var signature = AuthCrypto.AesDecrypt(sharedSecret, handshake.nonce, attempt.signature);
         var identityPublic = AuthCrypto.ReadPublic(handshake.identityPublic);
-        return identityPublic.VerifyData(buf, signature, HashAlgorithmName.SHA256);
+        return AuthCrypto.VerifyData(buf, signature, identityPublic);
     }
 }

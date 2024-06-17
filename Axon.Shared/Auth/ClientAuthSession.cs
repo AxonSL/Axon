@@ -7,7 +7,7 @@ namespace Axon.Shared.Auth;
 
 public class ClientAuthSession
 {
-    ECDsa identityKeyPair;
+    AsymmetricCipherKeyPair identityKeyPair;
     AsymmetricCipherKeyPair sessionKeyPair;
     byte[] nonce;
 
@@ -38,10 +38,9 @@ public class ClientAuthSession
         var buf = new byte[32];
         Array.Copy(nonce, 0, buf, 0, 12);
         Array.Copy(handshake.challenge, 0, buf, 12, 20);
-        var signature = identityKeyPair.SignData(buf, HashAlgorithmName.SHA256);
-
+        var signature = AuthCrypto.SignData(buf, identityKeyPair);
         var sharedSecret = AuthCrypto.ComputeSharedSecret(sessionKeyPair, handshake.sessionPublic);
-        signature = AuthCrypto.AesEncrypt(sharedSecret, new byte[12], signature);
+        signature = AuthCrypto.AesEncrypt(sharedSecret, nonce, signature);
         return new ClientLoginAttempt { signature = signature };
     }
 }
