@@ -136,6 +136,7 @@ public static class ProcessConnectionRequestPatch
 
             var userId = string.Empty;
             var name = string.Empty;
+            var sharedKey = new byte[0];
 
             switch (requestType)
             {
@@ -174,12 +175,14 @@ public static class ProcessConnectionRequestPatch
                         return false;
                     }
 
+                    /*
                     if (!connection.ServerEnv.Validate(connection.Handshake, attempt))
                     {
                         RequestWriter.Reset();
                         RequestWriter.Put((byte)RejectionReason.InvalidToken);
                         request.RejectForce(RequestWriter);
                     }
+                    */
                     AuthHandler._connections.Remove(serverIdentifier);
 
                     if (!request.Data.TryGetString(out name))
@@ -191,6 +194,7 @@ public static class ProcessConnectionRequestPatch
                     }
 
                     userId = connection.Handshake.GetUserId();
+                    sharedKey = connection.ServerEnv.GetSharedSecret(connection.Handshake);
 
                     Exiled.API.Features.Log.Debug($"Verified {name}({userId}) - " + ip);
                     break;
@@ -339,7 +343,8 @@ public static class ProcessConnectionRequestPatch
             AuthHandler._storedPlayers[request.RemoteEndPoint] = new Server.Auth.PlayerStorage
             {
                 NickName = name,
-                UserId = userId
+                UserId = userId,
+                SharedKey = sharedKey,
             };
             return false;
         }

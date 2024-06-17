@@ -3,6 +3,7 @@ using CentralAuth;
 using Exiled.API.Features;
 using HarmonyLib;
 using Mirror.LiteNetLib4Mirror;
+using System;
 
 namespace Axon.Server.Patches.Auth;
 
@@ -40,6 +41,8 @@ public static class PlayerAuthenticationManagerPatch
 
         __instance.UserId = player.UserId;
         __instance._hub.nicknameSync.UpdateNickname(player.NickName);
+        __instance._hub.encryptedChannelManager.EncryptionKey = player.SharedKey;
+        Log.Warn("SHARED KEY: " + Convert.ToBase64String(player.SharedKey));
         __instance._hub.serverRoles.RefreshPermissions(false);
         Exiled.Events.Patches.Events.Player.Verified.Postfix(__instance);
 

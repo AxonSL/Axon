@@ -20,6 +20,8 @@ namespace Axon.Client.Auth;
 public static class AuthHandler
 {
     private static Dictionary<string, ServerConnection> _connections = new();
+    
+    public static byte[] CurrentKey { get; private set; }
 
     public static string AuthFilePath { get; private set; }
     public static PlayerAuth PlayerAuth { get; private set; }
@@ -34,8 +36,6 @@ public static class AuthHandler
         var stream = new FileStream(AuthFilePath, FileMode.Open, FileAccess.Read);
         PlayerAuth = (PlayerAuth)serializer.Deserialize(stream);
         stream.Close();
-
-        MelonLogger.Msg(PlayerAuth.Identity);
     }
 
     internal static void AuthWrite(NetDataWriter writer)
@@ -88,6 +88,8 @@ public static class AuthHandler
                 writer.PutBytesWithLength(attempt.Encode());
                 writer.Put(connection.ServerIdentifier);
                 writer.Put(PlayerAuth.Username);
+
+                CurrentKey = connection.Session.GetSharedSecret(connection.Handshake);
             }
         }
         catch(Exception e)
