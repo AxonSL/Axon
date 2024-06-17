@@ -18,7 +18,7 @@ namespace Axon.Server.Patches.Auth;
 public static class PlayerAuthenticationManagerPatch
 {
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(PlayerAuthenticationManager), nameof(PlayerAuthenticationManager.FixedUpdate))]
+    [HarmonyPatch(typeof(PlayerAuthenticationManager), nameof(PlayerAuthenticationManager.Start))]
     public static void Start(PlayerAuthenticationManager __instance)
     {
         if (!__instance.isLocalPlayer)

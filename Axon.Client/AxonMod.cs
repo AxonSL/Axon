@@ -16,6 +16,11 @@ using MelonLoader;
 using System.Collections;
 using UnityEngine;
 using CommandHandler = Axon.Client.Command.CommandHandler;
+using Org.BouncyCastle.Crypto.Generators;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Pkcs;
+using Org.BouncyCastle.Security;
+using Org.BouncyCastle.Utilities.Encoders;
 
 [assembly: MelonInfo(typeof(AxonMod), "Axon", "0.1.0", "Dimenzio & Tiliboyy")]
 [assembly: MelonGame("Northwood", "SCPSL")]
@@ -46,5 +51,13 @@ public class AxonMod : MelonMod
         //Analyze should always be called last so that all handlers/events are registered
         MetaAnalyzer.Analyze();
         LoggerInstance.Msg("Axon Loaded");
+
+        var g = new X25519KeyPairGenerator();
+        g.Init(new X25519KeyGenerationParameters(new SecureRandom()));
+        var pair = g.GenerateKeyPair();
+        var privateKeyInfo = PrivateKeyInfoFactory.CreatePrivateKeyInfo(pair.Private);
+        var bytes = privateKeyInfo.ToAsn1Object().GetDerEncoded();
+
+        MelonLogger.Msg(Base64.ToBase64String(bytes));
     }
 }

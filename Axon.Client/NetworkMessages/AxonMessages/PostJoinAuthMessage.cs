@@ -7,7 +7,6 @@ using Il2CppCryptography;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Il2CppMirror;
-using Il2CppOrg.BouncyCastle.Crypto;
 using MelonLoader;
 
 namespace Axon.NetworkMessages;
