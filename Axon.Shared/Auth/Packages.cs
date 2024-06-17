@@ -26,7 +26,9 @@ public class AuthCrypto
         var attempt = clientEnv.CreateLoginAttempt(serverHandshake); // On Client
         // attempt -> Server
         var valid = serverEnv.Validate(clientHandshake, attempt); // On Server
+        Console.WriteLine(attempt.signature.Length);
         Console.WriteLine(valid);
+        Console.WriteLine(serverEnv.GetSharedSecret(clientHandshake).Length);
     }
 
     public static byte[] CreateIdentity()
@@ -204,9 +206,11 @@ public class ClientHandshake
     public byte[] sessionPublic; // X25519 [32]
     public byte[] nonce; // Random [12]
     
+    public const int Size = 112;
+    
     public byte [] Encode()
     {
-        var buf = new byte[112];
+        var buf = new byte[Size];
         Array.Copy(identityPublic, 0, buf, 0, 64);
         Array.Copy(sessionPublic, 0, buf, 64, 32);
         Array.Copy(nonce, 0, buf, 96, 12);
@@ -231,9 +235,11 @@ public class ServerHandshake
     public byte[] sessionPublic; // X25519 [32]
     public byte[] challenge; // Random [20]
     
+    public const int Size = 52;
+    
     public byte [] Encode()
     {
-        var buf = new byte[52];
+        var buf = new byte[Size];
         Array.Copy(sessionPublic, 0, buf, 0, 32);
         Array.Copy(challenge, 0, buf, 32, 20);
         return buf;
@@ -252,7 +258,7 @@ public class ServerHandshake
 
 public class ClientLoginAttempt
 {
-    public byte[] signature;
+    public byte[] signature; // Normally [80], not sure if this stays the same always after encryption
     
     public byte[] Encode()
     {
