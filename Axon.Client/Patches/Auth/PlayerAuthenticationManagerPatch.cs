@@ -1,9 +1,14 @@
-﻿using Axon.Client.Auth;
+﻿using Axon.Client.API.Features;
+using Axon.Client.Auth;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppCentralAuth;
 using Il2CppCryptography;
+using Il2CppMirror;
 using MelonLoader;
+using System.Text;
+using UnityEngine;
+using static Il2Cpp.EncryptedChannelManager;
 
 namespace Axon.Client.Patches.Auth;
 
@@ -16,20 +21,83 @@ public static class PlayerAuthenticationManagerPatch
     {
         if (!__instance.isLocalPlayer) return;
         __instance._hub.encryptedChannelManager.EncryptionKey = AuthHandler.CurrentKey;
-        MelonLogger.Warning("SHARED KEY: "+ Convert.ToBase64String(AuthHandler.CurrentKey));
     }
 
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(EncryptedChannelManager), nameof(EncryptedChannelManager.TryPack))]
-    public static void OnPack(EncryptedChannelManager __instance)
+    [HarmonyPatch(typeof(EncryptedChannelManager), nameof(EncryptedChannelManager.TrySendMessageToServer), new Type[] { typeof(string), typeof(EncryptedChannelManager.EncryptedChannel) })]
+    public static bool OnPack(EncryptedChannelManager __instance, out bool __result,
+        string content, EncryptedChannelManager.EncryptedChannel channel)
     {
-        MelonLogger.Warning("SHARED KEY: " + Convert.ToBase64String(__instance.EncryptionKey));
+        if (__instance._txCounter == 4294967295U)
+            __instance._txCounter = 0;
+        __instance._txCounter++;
+
+        EncryptedChannelManager.EncryptedMessageOutside messageOut;
+
+        var data = new byte[Misc.Utf8Encoding.GetByteCount(content) + 5];
+        data[0] = (byte)channel;
+        BitConverter.GetBytes(__instance._txCounter).CopyTo(data, 1);
+        Encoding.UTF8.GetBytes(content, 0, content.Length, data, 5);
+
+        if (__instance.EncryptionKey == null)
+        {
+            MelonLogger.Warning("Tried to send encrypted message, but no key was found");
+            __result = false;
+            return false;
+        }
+
+        var encryptedData = data;
+        messageOut = new EncryptedChannelManager.EncryptedMessageOutside(EncryptedChannelManager.SecurityLevel.EncryptedAndAuthenticated, encryptedData);
+
+        NetworkClient.Send(messageOut);
+        __result = true;
+        return false;
     }
 
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(AES), nameof(AES.AesGcmDecrypt))]
-    public static void OnDecrypt(byte[] data, byte[] secret)
+    [HarmonyPatch(typeof(EncryptedChannelManager), nameof(EncryptedChannelManager.ClientReceivePackedMessage))]
+    public static bool OnReceivePackedMessage(EncryptedChannelManager.EncryptedMessageOutside packed)
     {
-        MelonLogger.Warning("SHARED KEY: " + Convert.ToBase64String(secret));
+        var hub = LocalPlayer.Instance.ReferenceHub;
+
+        if(hub.encryptedChannelManager.EncryptionKey == null)
+        {
+            MelonLogger.Warning("Got EncryptedMessage eventhough no Key was set");
+            return false;
+        }
+        var decryptedData = packed.Data;
+
+        var channel = (EncryptedChannel)decryptedData[0];
+        var counter = BitConverter.ToUInt32(decryptedData, 1);
+        var content = Encoding.UTF8.GetString(decryptedData, 5, decryptedData.Length - 5);
+
+        if (hub.encryptedChannelManager._rxCounter == 4294967295U)
+            hub.encryptedChannelManager._rxCounter = 0;
+
+        if(counter <= hub.encryptedChannelManager._rxCounter)
+        {
+            MelonLogger.Warning(string.Format("Received message with counter {0}, which is lower or equal to last received message counter {1}. Discarding message!", counter, hub.encryptedChannelManager._rxCounter));
+            return false;
+        }
+
+        hub.encryptedChannelManager._rxCounter = counter;
+
+        if (!EncryptedChannelManager.ClientChannelHandlers.ContainsKey(channel))
+        {
+            MelonLogger.Warning(
+                string.Format("No handler is registered for encrypted channel {0} (client).", channel));
+            return false;
+        }
+
+        try
+        {
+            EncryptedChannelManager.ClientChannelHandlers[channel].Invoke(content, packed.Level);
+        }
+        catch(Exception ex)
+        {
+            Il2CppGameCore.Console.AddLog(string.Format("Exception while handling encrypted message on channel {0} (client, running a handler). Exception: {1}", channel, ex.Message), Color.red, false, Il2CppGameCore.Console.ConsoleLogType.Log);
+            Il2CppGameCore.Console.AddLog(ex.StackTrace, Color.red, false, Il2CppGameCore.Console.ConsoleLogType.Log);
+        }
+        return false;
     }
 }

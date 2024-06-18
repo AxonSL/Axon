@@ -175,14 +175,12 @@ public static class ProcessConnectionRequestPatch
                         return false;
                     }
 
-                    /*
                     if (!connection.ServerEnv.Validate(connection.Handshake, attempt))
                     {
                         RequestWriter.Reset();
                         RequestWriter.Put((byte)RejectionReason.InvalidToken);
                         request.RejectForce(RequestWriter);
                     }
-                    */
                     AuthHandler._connections.Remove(serverIdentifier);
 
                     if (!request.Data.TryGetString(out name))
