@@ -1,5 +1,6 @@
 ﻿using Axon.Server.Patches.Mirror;
 using CentralAuth;
+using Cryptography;
 using Exiled.API.Features;
 using HarmonyLib;
 using MEC;
@@ -85,7 +86,7 @@ public static class PlayerAuthenticationManagerPatch
                 __result = false;
                 return false;
             }
-            var encryptedData = data;
+            var encryptedData = Cryptography.AES.AesGcmEncrypt(data, __instance.EncryptionKey, EncryptedChannelManager.SecureRandom);
             messageOut = new EncryptedChannelManager.EncryptedMessageOutside(EncryptedChannelManager.SecurityLevel.EncryptedAndAuthenticated, encryptedData);
         }
 
@@ -119,7 +120,7 @@ public static class PlayerAuthenticationManagerPatch
                 return false;
             }
 
-            var decryptedData = packed.Data;
+            var decryptedData = AES.AesGcmDecrypt(packed.Data, hub.encryptedChannelManager.EncryptionKey);
 
             channel = (EncryptedChannel)decryptedData[0];
             counter = BitConverter.ToUInt32(decryptedData, 1);

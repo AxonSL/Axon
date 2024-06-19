@@ -6,9 +6,14 @@ using Il2CppCentralAuth;
 using Il2CppCryptography;
 using Il2CppMirror;
 using MelonLoader;
+using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Modes;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Security;
 using System.Text;
 using UnityEngine;
 using static Il2Cpp.EncryptedChannelManager;
+using static Il2CppSystem.Globalization.CultureInfo;
 
 namespace Axon.Client.Patches.Auth;
 
@@ -39,6 +44,8 @@ public static class PlayerAuthenticationManagerPatch
         BitConverter.GetBytes(__instance._txCounter).CopyTo(data, 1);
         Encoding.UTF8.GetBytes(content, 0, content.Length, data, 5);
 
+        MelonLogger.Warning(Convert.ToBase64String(data));
+
         if (__instance.EncryptionKey == null)
         {
             MelonLogger.Warning("Tried to send encrypted message, but no key was found");
@@ -46,12 +53,39 @@ public static class PlayerAuthenticationManagerPatch
             return false;
         }
 
-        var encryptedData = data;
+        var encryptedData = AesGcmEncrypt(data, __instance.EncryptionKey, _secureRandom);
+        MelonLogger.Warning(Convert.ToBase64String(encryptedData));
         messageOut = new EncryptedChannelManager.EncryptedMessageOutside(EncryptedChannelManager.SecurityLevel.EncryptedAndAuthenticated, encryptedData);
 
         NetworkClient.Send(messageOut);
         __result = true;
         return false;
+    }
+
+    private static readonly SecureRandom _secureRandom = new();
+
+    private static byte[] AesGcmEncrypt(byte[] data, byte[] secret, SecureRandom secureRandom)
+    {
+        byte[] array = new byte[32];
+        byte[] result;
+
+        secureRandom.NextBytes(array, 0, array.Length);
+        GcmBlockCipher gcmBlockCipher = new GcmBlockCipher(new AesEngine());
+        gcmBlockCipher.Init(true, new AeadParameters(new KeyParameter(secret), 128, array));
+        int outputSize = gcmBlockCipher.GetOutputSize(data.Length);
+        var array2 = new byte[outputSize];
+        int outOff = gcmBlockCipher.ProcessBytes(data, 0, data.Length, array2, 0);
+        gcmBlockCipher.DoFinal(array2, outOff);
+        using (MemoryStream memoryStream = new MemoryStream())
+        {
+            using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
+            {
+                binaryWriter.Write(array);
+                binaryWriter.Write(array2, 0, outputSize);
+            }
+            result = memoryStream.ToArray();
+        }
+        return result;
     }
 
     [HarmonyPrefix]
@@ -65,7 +99,7 @@ public static class PlayerAuthenticationManagerPatch
             MelonLogger.Warning("Got EncryptedMessage eventhough no Key was set");
             return false;
         }
-        var decryptedData = packed.Data;
+        var decryptedData = AES.AesGcmDecrypt(packed.Data, hub.encryptedChannelManager.EncryptionKey);
 
         var channel = (EncryptedChannel)decryptedData[0];
         var counter = BitConverter.ToUInt32(decryptedData, 1);
