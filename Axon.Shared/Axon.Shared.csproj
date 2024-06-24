@@ -37,6 +37,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auth\Base58.cs" />
     <Compile Include="Auth\ClientAuthSession.cs" />
     <Compile Include="Auth\ClientHandshake.cs" />
     <Compile Include="Auth\ClientLoginAttempt.cs" />
@@ -63,6 +65,9 @@
     <Compile Include="Meta\MetaEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShareMain.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -81,6 +81,7 @@ public class AxonPlugin : Plugin<AxonConfig>
 
     private void OnRoundStart()
     {
+        AssetBundleSpawner.SpawnAsset("dimenzio", "Assets/Map_v2.prefab", "custom map", new Vector3(0f,1020f,0f));
         AssetBundleSpawner.SpawnAsset("default", "empty", "AxonHandler", "Axon.AxonHandlerScript").GetComponent<AxonHandlerScript>().Test = 10;
         foreach (var player in ReferenceHub.AllHubs)
         {

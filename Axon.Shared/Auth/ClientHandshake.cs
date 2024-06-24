@@ -39,6 +39,6 @@ public class ClientHandshake
     {
         var sha = SHA256.Create();
         var hash = sha.ComputeHash(identityPublic);
-        return Convert.ToBase64String(hash) + "@axon";
+        return Base58.Encode(hash)+"@axon";
     }
 }

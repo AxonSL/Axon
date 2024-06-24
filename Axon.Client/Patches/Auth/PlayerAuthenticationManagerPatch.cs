@@ -44,8 +44,6 @@ public static class PlayerAuthenticationManagerPatch
         BitConverter.GetBytes(__instance._txCounter).CopyTo(data, 1);
         Encoding.UTF8.GetBytes(content, 0, content.Length, data, 5);
 
-        MelonLogger.Warning(Convert.ToBase64String(data));
-
         if (__instance.EncryptionKey == null)
         {
             MelonLogger.Warning("Tried to send encrypted message, but no key was found");
@@ -54,7 +52,6 @@ public static class PlayerAuthenticationManagerPatch
         }
 
         var encryptedData = AesGcmEncrypt(data, __instance.EncryptionKey, _secureRandom);
-        MelonLogger.Warning(Convert.ToBase64String(encryptedData));
         messageOut = new EncryptedChannelManager.EncryptedMessageOutside(EncryptedChannelManager.SecurityLevel.EncryptedAndAuthenticated, encryptedData);
 
         NetworkClient.Send(messageOut);

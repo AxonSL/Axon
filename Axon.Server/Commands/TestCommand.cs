@@ -22,10 +22,7 @@ public class TestCommand : ICommand
     {
         try
         {
-            foreach (var hub in ReferenceHub.AllHubs)
-            {
-                hub.roleManager.ServerSetRole((RoleTypeId)44, RoleChangeReason.None);
-            }
+            Player.Get(sender).Position = UnityEngine.Vector3.up * 500f;
         }
         catch (Exception ex)
         {

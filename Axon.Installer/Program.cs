@@ -23,19 +23,7 @@ public static class Programm
         Console.WriteLine("Getting compatible versions...");
         var versionsString = client.GetStringAsync(uriResult).GetAwaiter().GetResult();
         var versions = versionsString.Split('\n');
-        Console.WriteLine("Which game Version do you want to patch?");
-        Console.WriteLine("These versions are available: " + string.Join(", ", versions));
-        for(; ; )
-        {
-            gameVersion = Console.ReadLine();
-
-            if (!versions.Any(x => x == gameVersion))
-            {
-                Console.WriteLine("Invalid Version");
-                continue;
-            }
-            break;
-        }
+        gameVersion = versions[versions.Length - 1];
 
         //Configuration
         Console.WriteLine($"Current configuration:\nGameVersion: {gameVersion}\nManualDirectory: {selectDirectory}\nInstall MelonLoader: {installMelonLoader}\nInstall Axon: {installAxon}");
@@ -48,6 +36,20 @@ public static class Programm
                 break;
 
             if (input != "edit") continue;
+
+            Console.WriteLine("Which game Version do you want to patch?");
+            Console.WriteLine("These versions are available: " + string.Join(", ", versions));
+            for (; ; )
+            {
+                gameVersion = Console.ReadLine();
+
+                if (!versions.Any(x => x == gameVersion))
+                {
+                    Console.WriteLine("Invalid Version");
+                    continue;
+                }
+                break;
+            }
 
             Console.WriteLine("Do you want to select a directory yourself?(yes/no)");
 
@@ -168,12 +170,24 @@ public static class Programm
             Console.WriteLine("Downloading Melonloader");
             DownloadFile("https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.x64.zip", zip);
             Console.WriteLine("Extracting Melonloader");
-            System.IO.Compression.ZipFile.ExtractToDirectory(zip, moddedPath);
+            System.IO.Compression.ZipFile.ExtractToDirectory(zip, moddedPath, true);
             Console.WriteLine("Deleting zip");
             File.Delete(zip);
         }
 
-        //TODO: Install Axon
+        //Install Axon
+        if (installAxon)
+        {
+            var zip = Path.Combine(moddedPath, "Axon.Client.zip");
+            if(!File.Exists(zip))
+                File.Create(zip).Close();
+            Console.WriteLine("Downloading Axon");
+            DownloadFile("https://github.com/AxonSL/Axon/releases/latest/download/Axon.Client.zip", zip);
+            Console.WriteLine("Extracting Axon");
+            System.IO.Compression.ZipFile.ExtractToDirectory(zip, moddedPath, true);
+            Console.WriteLine("Deleting zip");
+            File.Delete(zip);
+        }
 
         //Finally
         Console.WriteLine("Your game is now patched." + (installAxon ? "" : " In order to start it open a cmd and type \"SCPSL.exe -noauth\" in it."));
@@ -194,7 +208,7 @@ public static class Programm
             if (file.Name == "SCPSL.exe") continue;
 
             Console.WriteLine("Copying " + file.Name);
-            file.CopyTo(Path.Combine(target.FullName, file.Name));
+            file.CopyTo(Path.Combine(target.FullName, file.Name), true);
         }
     }
 
