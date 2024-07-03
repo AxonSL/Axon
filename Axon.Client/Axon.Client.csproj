@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="HarmonyX" Version="2.12.0" />
     <PackageReference Include="LavaGang.MelonLoader" Version="0.6.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>

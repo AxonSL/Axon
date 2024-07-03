@@ -10,6 +10,8 @@ using Axon.Client.API.Features;
 using UnityEngine.SceneManagement;
 using Axon.Client.Event.Handlers;
 using Axon.Client.Auth;
+using Il2Cpp;
+using Il2CppTMPro;
 
 namespace Axon.Client.Event;
 
@@ -69,6 +71,8 @@ public class AxonEventHandler : EventListener
         var gameVersion = text.text;
         text.text = "Axon Version: " + AxonMod.AxonVersion + " Game Version: " + gameVersion;
 
-        AuthHandler.Init();
+        Welcome.CurrentNickname = AuthHandler.PlayerAuth.Username;
+        //TODO: fix this
+        GameObject.Find("New Main Manu/News/Welcome").GetComponent<TextMeshProUGUI>().text = "Welcome back, " + AuthHandler.PlayerAuth.Username + "!";
     }
 }

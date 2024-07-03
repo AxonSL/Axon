@@ -14,6 +14,7 @@ using Il2CppLiteNetLib.Utils;
 using Il2CppLiteNetLib;
 using System.Collections;
 using UnityEngine;
+using Newtonsoft.Json;
 
 namespace Axon.Client.Auth;
 
@@ -28,14 +29,24 @@ public static class AuthHandler
 
     internal static void Init()
     {
-        AuthFilePath = Path.Combine(Paths.AxonPath, "user.xml");
-        if (!File.Exists(AuthFilePath))
-            CreateNew();
+        try
+        {
+            AuthFilePath = Path.Combine(Paths.AxonPath, "user.json");
+            MelonLogger.Msg(AuthFilePath);
+            if (!File.Exists(AuthFilePath))
+                CreateNew();
 
-        var serializer = new XmlSerializer(typeof(PlayerAuth));
-        var stream = new FileStream(AuthFilePath, FileMode.Open, FileAccess.Read);
-        PlayerAuth = (PlayerAuth)serializer.Deserialize(stream);
-        stream.Close();
+            var auth = JsonConvert.DeserializeObject<PlayerAuth>(File.ReadAllText(AuthFilePath));
+
+            if (auth.Identity == "pending")
+                CreateNew(auth.Username);
+
+            PlayerAuth = auth;
+        }
+        catch(Exception ex)
+        {
+            MelonLogger.Error(ex);
+        }
     }
 
     internal static void AuthWrite(NetDataWriter writer)
@@ -130,19 +141,16 @@ public static class AuthHandler
         Il2CppGameCore.Console.singleton.TypeCommand("connect " + ip + ":" + port);
     }
 
-    private static void CreateNew()
+    private static void CreateNew(string name = "")
     {
+        MelonLogger.Msg("Create new");
         var auth = new PlayerAuth()
         {
-            Username = Welcome.CurrentNickname
+            Username = string.IsNullOrEmpty(name) ? Computer.UserName : name,
         };
         auth.SetIdentity(AuthCrypto.CreateIdentity());
 
-        var sw = new StringWriter();
-        var serializer = new XmlSerializer(typeof(PlayerAuth));
-        serializer.Serialize(sw, auth);
-
         File.Create(AuthFilePath).Close();
-        File.WriteAllText(AuthFilePath, sw.ToString(), Encoding.Unicode);
+        File.WriteAllText(AuthFilePath, JsonConvert.SerializeObject(auth));
     }
 }

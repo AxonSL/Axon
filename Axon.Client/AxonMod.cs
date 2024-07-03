@@ -21,6 +21,7 @@ using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities.Encoders;
+using Axon.Client.Auth;
 
 [assembly: MelonInfo(typeof(AxonMod), "Axon", "0.1.0", "Dimenzio & Tiliboyy")]
 [assembly: MelonGame("Northwood", "SCPSL")]
@@ -43,6 +44,7 @@ public class AxonMod : MelonMod
         CommandHandler.Init();
         MessageHandler.Init();
         AssetBundleSpawner.Init();
+        AuthHandler.Init();
 
         UnityHandler.Init();
         MenuHandler.Init();
