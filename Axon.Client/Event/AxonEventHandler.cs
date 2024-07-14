@@ -12,6 +12,7 @@ using Axon.Client.Event.Handlers;
 using Axon.Client.Auth;
 using Il2Cpp;
 using Il2CppTMPro;
+using static Il2Cpp.PlayerArms;
 
 namespace Axon.Client.Event;
 
@@ -63,16 +64,39 @@ public class AxonEventHandler : EventListener
     [EventHandler]
     public void OnCanvasReady(CanvasReadyEventArg _)
     {
-        var texture = new Texture2D(600, 600);
-        ImageConversion.LoadImage(texture, File.ReadAllBytes("axon.png"));
-        GameObject.Find("Canvas/Logo").GetComponent<RawImage>().texture = texture;
+        try
+        {
+            var texture = new Texture2D(600, 600);
+            ImageConversion.LoadImage(texture, File.ReadAllBytes("axon.png"));
+            GameObject.Find("Canvas/Logo").GetComponent<RawImage>().texture = texture;
 
-        var text = GameObject.Find("Canvas/Version").GetComponent<Text>();
-        var gameVersion = text.text;
-        text.text = "Axon Version: " + AxonMod.AxonVersion + " Game Version: " + gameVersion;
+            var text = GameObject.Find("Canvas/Version").GetComponent<Text>();
+            var gameVersion = text.text;
+            text.text = "Axon Version: " + AxonMod.AxonVersion + " Game Version: " + gameVersion;
 
-        Welcome.CurrentNickname = AuthHandler.PlayerAuth.Username;
-        //TODO: fix this
-        GameObject.Find("New Main Manu/News/Welcome").GetComponent<TextMeshProUGUI>().text = "Welcome back, " + AuthHandler.PlayerAuth.Username + "!";
+            /*
+            Welcome.CurrentNickname = AuthHandler.PlayerAuth.Username;
+            //TODO: fix this
+            GameObject.Find("New Main Manu/News/Welcome").GetComponent<TextMeshProUGUI>().text = "Welcome back, " + AuthHandler.PlayerAuth.Username + "!";
+            */
+
+            MelonLogger.Warning("Test");
+            Coroutines.CallDelayed(1f, () =>
+            {
+                foreach (var arg in StartupArgs.Args)
+                {
+                    MelonLogger.Warning(arg);
+                    if (arg.StartsWith("-ip="))
+                    {
+                        API.Features.Client.Connect(arg);
+                        break;
+                    }
+                }
+            });
+        }
+        catch(Exception e)
+        {
+            MelonLogger.Warning(e);
+        }
     }
 }

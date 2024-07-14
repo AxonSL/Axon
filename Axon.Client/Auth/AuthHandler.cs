@@ -32,14 +32,16 @@ public static class AuthHandler
         try
         {
             AuthFilePath = Path.Combine(Paths.AxonPath, "user.json");
-            MelonLogger.Msg(AuthFilePath);
             if (!File.Exists(AuthFilePath))
                 CreateNew();
 
-            var auth = JsonConvert.DeserializeObject<PlayerAuth>(File.ReadAllText(AuthFilePath));
+            var auth = File.Exists(AuthFilePath) ? JsonConvert.DeserializeObject<PlayerAuth>(File.ReadAllText(AuthFilePath)) : CreateNew();
 
             if (auth.Identity == "pending")
-                CreateNew(auth.Username);
+            {
+                auth = CreateNew(auth.Username);
+            }
+
 
             PlayerAuth = auth;
         }
@@ -112,11 +114,12 @@ public static class AuthHandler
     internal static void RejectAuth(DisconnectInfo info)
     {
         MelonLogger.Warning("Rejected Auth");
+        var pos = info.AdditionalData._position;
         var data = info.AdditionalData;
         var requestType = data.GetByte();
         if (requestType != 100)
         {
-            info.AdditionalData._position = 0;
+            info.AdditionalData._position = pos;
             return;
         }
 
@@ -141,7 +144,7 @@ public static class AuthHandler
         Il2CppGameCore.Console.singleton.TypeCommand("connect " + ip + ":" + port);
     }
 
-    private static void CreateNew(string name = "")
+    private static PlayerAuth CreateNew(string name = "")
     {
         MelonLogger.Msg("Create new");
         var auth = new PlayerAuth()
@@ -152,5 +155,7 @@ public static class AuthHandler
 
         File.Create(AuthFilePath).Close();
         File.WriteAllText(AuthFilePath, JsonConvert.SerializeObject(auth));
+
+        return auth;
     }
 }

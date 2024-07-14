@@ -1,24 +1,26 @@
-﻿namespace Axon.ServerList;
+﻿using Newtonsoft.Json;
+
+namespace Axon.ServerList;
 
 [Serializable]
 public struct Server
 {
-    public string Version;                          //1
-    public string Info;                             //2
-    public string Patsebin;                         //4
+    [JsonProperty("version")] public string Version;                          //1
+    [JsonProperty("info")] public string Info;                             //2
+    [JsonProperty("pastebin")] public string Patsebin;                         //4
 
-    public bool Geoblocking;                        //8
-    public bool Whitelist;                          //16
-    public bool AccessRestriction;                  //32
+    [JsonProperty("geoblocking")] public bool Geoblocking;                        //8
+    [JsonProperty("whitelist")] public bool Whitelist;                          //16
+    [JsonProperty("accessRestriction")] public bool AccessRestriction;                  //32
 
-    public bool FriendlyFire;                       //64
-    public int Players;                             //128
-    public int MaxPlayers;                          //256
-    public Dictionary<string, string> PlayerList;   //512
+    [JsonProperty("firendlyFire")] public bool FriendlyFire;                       //64
+    [JsonProperty("players")] public int Players;                             //128
+    [JsonProperty("maxPlayers")] public int MaxPlayers;                          //256
+    [JsonProperty("playerList")] public Dictionary<string, string> PlayerList;   //512
 
-    public DownloadInfo[] Downloads;                //1024
+    [JsonProperty("downloads")] public DownloadInfo Download;                //1024
 
-    public string Ip;
-    public ushort Port;
-    public string Identifier;
+    [JsonProperty("ip")] public string Ip;
+    [JsonProperty("port")] public ushort Port;
+    [JsonProperty("identifier")] public string Identifier;
 }

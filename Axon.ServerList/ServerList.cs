@@ -180,8 +180,10 @@ public class ServerList
                                 if ((updateBit & 512) != 0)
                                     entry.Server.PlayerList = server.PlayerList;
 
+                                /*
                                 if ((updateBit & 1024) != 0)
                                     entry.Server.Downloads = server.Downloads;
+                                */
 
                                 response.StatusCode = 200;
                                 break;

@@ -1,5 +1,6 @@
 ﻿using CommandSystem;
 using Exiled.API.Features;
+using Mirror;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -20,15 +21,15 @@ public class TestCommand : ICommand
 
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
-        try
+        foreach(var connection in NetworkServer.connections.Values)
         {
-            Player.Get(sender).Position = UnityEngine.Vector3.up * 500f;
+            connection.Send(new Axon.NetworkMessages.TestMessage()
+            {
+                message = "TEST"
+            });
         }
-        catch (Exception ex)
-        {
-            Log.Error(ex);
-        }
-        response = "set to role 44";
+
+        response = "sended message";
         return true;
     }
 }

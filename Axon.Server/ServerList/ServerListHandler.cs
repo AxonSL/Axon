@@ -57,70 +57,62 @@ public static class ServerListHandler
                 MaxPlayers = CustomNetworkManager.slots,
             };
 
-            json += "\"Ip\": \"" + ServerConsole.Ip + "\"";
-            json += ",\"Port\": " + ServerConsole.PortToReport;
+            json += "\"ip\": \"" + ServerConsole.Ip + "\"";
+            json += ",\"port\": " + ServerConsole.PortToReport;
 
             if(_lastSend == null || _lastSend.Version != current.Version)
             {
                 bits |= 1;
-                json += ",\"Version\": \"" + current.Version + "\"";
+                json += ",\"version\": \"" + current.Version + "\"";
             }
 
             if (_lastSend == null || _lastSend.Info != current.Info)
             {
                 bits |= 2;
-                json += ",\"Info\": \"" + current.Info + "\"";
+                json += ",\"info\": \"" + current.Info + "\"";
             }
 
             if (_lastSend == null || _lastSend.Patsebin != current.Patsebin)
             {
                 bits |= 4;
-                json += ",\"Pastebin\": \"" + current.Patsebin + "\"";
+                json += ",\"pastebin\": \"" + current.Patsebin + "\"";
             }
 
             if (_lastSend == null || _lastSend.Geoblocking != current.Geoblocking)
             {
                 bits |= 8;
-                json += ",\"Geoblocking\": " + current.Geoblocking.ToString().ToLower();
+                json += ",\"geoblocking\": " + current.Geoblocking.ToString().ToLower();
             }
 
             if (_lastSend == null || _lastSend.Whitelist != current.Whitelist)
             {
                 bits |= 16;
-                json += ",\"Whitelist\": " + current.Whitelist.ToString().ToLower();
+                json += ",\"whitelist\": " + current.Whitelist.ToString().ToLower();
             }
 
             if (_lastSend == null || _lastSend.AccessRestriction != current.AccessRestriction)
             {
                 bits |= 32;
-                json += ",\"AccessRestriction\": " + current.AccessRestriction.ToString().ToLower();
+                json += ",\"accessRestriction\": " + current.AccessRestriction.ToString().ToLower();
             }
 
             if (_lastSend == null || _lastSend.FriendlyFire != current.FriendlyFire)
             {
                 bits |= 64;
-                json += ",\"FriendlyFire\": " + current.FriendlyFire.ToString().ToLower();
+                json += ",\"friendlyFire\": " + current.FriendlyFire.ToString().ToLower();
             }
 
             if (_lastSend == null || _lastSend.Players != current.Players)
             {
                 bits |= 128;
-                json += ",\"Players\": " + current.Players;
+                json += ",\"players\": " + current.Players;
             }
 
             if (_lastSend == null || _lastSend.MaxPlayers != current.MaxPlayers)
             {
                 bits |= 256;
-                json += ",\"MaxPlayers\": " + current.MaxPlayers;
+                json += ",\"maxPlayers\": " + current.MaxPlayers;
             }
-
-            /*
-            if (_lastSend == null || _lastSend.Downloads != )
-            {
-                bits |= 1024;
-                json += ",\"MaxPlayers\": " + CustomNetworkManager.slots;
-            }
-            */
 
 
             json += "}";

@@ -31,7 +31,7 @@ public static class ProcessConnectionRequestPatch
             if (!request.Data.TryGetByte(out var requestType))
             {
                 RequestWriter.Reset();
-                RequestWriter.Put(4);
+                RequestWriter.Put(2);
                 request.RejectForce(RequestWriter);
                 return false;
             }

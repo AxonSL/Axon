@@ -16,6 +16,7 @@ using Axon.Shared.Meta;
 using Axon.Server.AssetBundle.CustomScript;
 using HarmonyLib;
 using CentralAuth;
+using Mirror;
 
 namespace Axon.Server;
 
