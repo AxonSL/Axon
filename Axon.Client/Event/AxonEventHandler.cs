@@ -19,6 +19,8 @@ namespace Axon.Client.Event;
 [Automatic]
 public class AxonEventHandler : EventListener
 {
+    private bool _firstload = true;
+
     public AxonEventHandler()
     {
         SceneManager.add_sceneLoaded(new System.Action<Scene, LoadSceneMode>(OnSceneLoaded));
@@ -80,19 +82,19 @@ public class AxonEventHandler : EventListener
             GameObject.Find("New Main Manu/News/Welcome").GetComponent<TextMeshProUGUI>().text = "Welcome back, " + AuthHandler.PlayerAuth.Username + "!";
             */
 
-            MelonLogger.Warning("Test");
-            Coroutines.CallDelayed(1f, () =>
-            {
+            if(_firstload)
                 foreach (var arg in StartupArgs.Args)
                 {
-                    MelonLogger.Warning(arg);
                     if (arg.StartsWith("-ip="))
                     {
-                        API.Features.Client.Connect(arg);
+                        var split = arg.Split('=');
+                        if (split.Length < 2) continue;
+                        API.Features.Client.Connect(split[1]);
                         break;
                     }
                 }
-            });
+
+            _firstload = false;
         }
         catch(Exception e)
         {
