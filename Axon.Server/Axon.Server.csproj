@@ -130,6 +130,7 @@
     <Compile Include="NetworkMessages\MessageHandler.cs" />
     <Compile Include="Patches\Auth\PlayerAuthenticationManagerPatch.cs" />
     <Compile Include="Patches\Auth\ProcessConnectionRequestPatch.cs" />
+    <Compile Include="Patches\ExiledPatches\PlayerGetPatch.cs" />
     <Compile Include="Patches\ServerList\CustomNetworkManagerCreateLobby.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NetworkMessages\AxonMessages\TestMessage.cs" />
