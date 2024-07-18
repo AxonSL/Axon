@@ -124,6 +124,7 @@
     <Compile Include="Event\EventMessageId.cs" />
     <Compile Include="Event\RoundEventHandler.cs" />
     <Compile Include="NetworkMessages\AxonMessages\EventMessage.cs" />
+    <Compile Include="NetworkMessages\AxonMessages\RemoveAssetComponentMessage.cs" />
     <Compile Include="NetworkMessages\AxonMessages\SpawnAssetMessage.cs" />
     <Compile Include="NetworkMessages\AxonMessages\SyncVarMessage.cs" />
     <Compile Include="NetworkMessages\AxonMessages\UpdateAssetMessage.cs" />

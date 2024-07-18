@@ -44,6 +44,11 @@ public static class MessageHandler
         Writer<SyncVarMessage>.write = WriteSyncVarMessage;
         Reader<SyncVarMessage>.read = ReadSyncVarMessage;
         NetworkServer.RegisterHandler<SyncVarMessage>(OnSyncVarMessage);
+        
+        //RemoveAssetComponentMessage
+        Writer<RemoveAssetComponentMessage>.write = WriteRemoveAssetComponentMessage;
+        Reader<RemoveAssetComponentMessage>.read = ReadRemoveAssetComponentMessage;
+        NetworkServer.RegisterHandler<RemoveAssetComponentMessage>(OnRemoveAssetComponentMessage);
     }
 
     #region TestMessage
@@ -193,6 +198,27 @@ public static class MessageHandler
     {
         message.connection = connection;
         AssetBundleSpawner.OnSyncVarMessage(message);
+    }
+    #endregion
+    
+    #region TestMessage
+    private static void WriteRemoveAssetComponentMessage(NetworkWriter writer, RemoveAssetComponentMessage message)
+    {
+        writer.WriteUInt(message.objectId);
+        writer.WriteString(message.componentName);
+    }
+
+    private static RemoveAssetComponentMessage ReadRemoveAssetComponentMessage(NetworkReader reader)
+    {
+        return new RemoveAssetComponentMessage(){
+            objectId = reader.ReadUInt(), componentName = reader.ReadString(),
+        };
+    }
+
+    private static void OnRemoveAssetComponentMessage(NetworkConnection connection, RemoveAssetComponentMessage message)
+    {
+        Log.Info("not for client nuh uh");
+        
     }
     #endregion
 }

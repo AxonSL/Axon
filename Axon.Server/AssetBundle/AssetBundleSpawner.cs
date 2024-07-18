@@ -25,15 +25,58 @@ public static class AssetBundleSpawner
     public static ReadOnlyDictionary<string, Type> CustomComponents { get; private set; } = new(new Dictionary<string, Type>());
 
 
+    /// <summary>
+    /// Spawns an asset from an asset bundle.
+    /// </summary>
+    /// <param name="bundle">The name of the asset bundle.</param>
+    /// <param name="asset">The name of the asset within the bundle.</param>
+    /// <param name="gameObjectName">The name of the game object.</param>
+    /// <param name="position">The position of the spawned game object.</param>
+    /// <param name="rotation">The rotation of the spawned game object.</param>
+    /// <param name="scale">The scale of the spawned game object.</param>
+    /// <param name="components">The names of the components to attach to the spawned game object.</param>
+    /// <returns>The spawned game object's AxonAssetScript component.</returns>
     public static AxonAssetScript SpawnAsset(string bundle, string asset, string gameObjectName = "Axon Asset", params string[] components)
     => SpawnAsset(bundle, asset, gameObjectName, Vector3.zero, Quaternion.identity, Vector3.one, components);
 
+    /// <summary>
+    /// Spawns an asset from an asset bundle.
+    /// </summary>
+    /// <param name="bundle">The name of the asset bundle.</param>
+    /// <param name="asset">The name of the asset within the bundle.</param>
+    /// <param name="gameObjectName">The name of the game object.</param>
+    /// <param name="position">The position of the spawned game object.</param>
+    /// <param name="rotation">The rotation of the spawned game object.</param>
+    /// <param name="scale">The scale of the spawned game object.</param>
+    /// <param name="components">The names of the components to attach to the spawned game object.</param>
+    /// <returns>The spawned game object's AxonAssetScript component.</returns>
     public static AxonAssetScript SpawnAsset(string bundle, string asset, string gameObjectName, Vector3 position, params string[] components)
         => SpawnAsset(bundle, asset, gameObjectName, position, Quaternion.identity, Vector3.one, components);
 
+    /// Spawns an asset from an asset bundle
+    /// </summary>
+    /// <param name="bundle">The name of the asset bundle.</param>
+    /// <param name="asset">The name of the asset within the bundle.</param>
+    /// <param name="gameObjectName">The name of the game object</param>
+    /// <param name="position">The position of the spawned game object.</param>
+    /// <param name="rotation">The rotation of the spawned game object.</param>
+    /// <param name="scale">The scale of the spawned game object.</param>
+    /// <param name="components">The names of the components to attach to the spawned game object.</param>
+    /// <returns>The spawned game object's AxonAssetScript component.</returns>
     public static AxonAssetScript SpawnAsset(string bundle, string asset, string gameObjectName, Vector3 position, Quaternion rotation, params string[] components)
         => SpawnAsset(bundle, asset, gameObjectName, position, rotation, Vector3.one, components);
 
+    /// <summary>
+    /// Spawns an asset from an asset bundle
+    /// </summary>
+    /// <param name="bundle">The name of the asset bundle.</param>
+    /// <param name="asset">The name of the asset within the bundle.</param>
+    /// <param name="gameObjectName">The name of the game object</param>
+    /// <param name="position">The position of the spawned game object.</param>
+    /// <param name="rotation">The rotation of the spawned game object.</param>
+    /// <param name="scale">The scale of the spawned game object.</param>
+    /// <param name="components">The names of the components to attach to the spawned game object.</param>
+    /// <returns>The spawned game object's AxonAssetScript component.</returns>
     public static AxonAssetScript SpawnAsset(string bundle, string asset, string gameObjectName, Vector3 position, Quaternion rotation, Vector3 scale, params string[] components)
     {
         GameObject obj;
@@ -103,7 +146,7 @@ public static class AssetBundleSpawner
             var allComps = spawned.GameObject.GetComponents<AxonCustomScript>().Where(x => x.SyncVars.Count > 0);
             var writer = NetworkWriterPool.Get();
             writer.WriteUShort((ushort)allComps.Count());
-
+            
             foreach (var component in allComps)
             {
                 writer.WriteString(component.UniqueName);
@@ -113,6 +156,8 @@ public static class AssetBundleSpawner
             msg.componetsData = writer.ToArraySegment();
             ev.Player.Connection.Send(msg);
             NetworkWriterPool.Return(writer);
+  
+            spawned.RemoveAllComponents(ev.Player);
         }
     }
 
@@ -193,7 +238,8 @@ public static class AssetBundleSpawner
             AssetName = asset,
             GameObject = obj,
             Script = comp,
-            Components = components
+            Components = components,
+            RemovedComponents = [],
         };
         comp.SpawnedAsset = spawnedAsset;
         var list = new List<SpawnedAsset>(SpawnedAssets)

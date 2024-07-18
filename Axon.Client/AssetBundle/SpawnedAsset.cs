@@ -1,5 +1,4 @@
-﻿using Axon.Client.AssetBundle;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Axon.Client.AssetBundle;
 
@@ -11,4 +10,6 @@ public class SpawnedAsset
     public string Bundle {  get; internal set; }
     public string AssetName { get; internal set; }
     public string[] Components { get; internal set; }
+
+    
 }
