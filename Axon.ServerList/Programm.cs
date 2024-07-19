@@ -20,6 +20,12 @@ public static class Programm
 
         var content = File.ReadAllText(ConfigPath);
         var config = JsonConvert.DeserializeObject<ServerListConfiguration>(content);
+
+        var url = Environment.GetEnvironmentVariable("URL");
+        if (url != null)
+        {
+            config.Url = url;
+        }
         ServerList = new ServerList(config, args);
 
         Task.Delay(-1).GetAwaiter().GetResult();
@@ -29,7 +35,7 @@ public static class Programm
     {
         var config = new ServerListConfiguration
         {
-            Url = "http://*:8080/",
+            Url = "https://*",
             VerifiedServers = new VerifiedServers[0] { }
         };
 

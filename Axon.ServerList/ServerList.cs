@@ -51,7 +51,7 @@ public class ServerList
             }
         }
 
-        _listener.Prefixes.Add(Configuration.Url);
+        _listener.Prefixes.Add(Configuration.Url+ ":8080/");
         _listener.Start();
 
         Task.Run(Listen);
