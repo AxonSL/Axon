@@ -6,7 +6,7 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Axon.ServerList/Axon.ServerList.csproj", "Axon.ServerList/"]
+COPY ["./Axon.ServerList.csproj", "Axon.ServerList/"]
 RUN dotnet restore "./Axon.ServerList/Axon.ServerList.csproj"
 COPY . .
 WORKDIR "/src/Axon.ServerList"
