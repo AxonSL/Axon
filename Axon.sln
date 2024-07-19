@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axon.Client", "Axon.Client\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axon.Installer", "Axon.Installer\Axon.Installer.csproj", "{55305CE3-E0BC-438A-9E85-A915CD0E9580}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axon.ServerList", "Axon.ServerList\Axon.ServerList.csproj", "{3DA9A57C-0DA2-4520-8EB9-383536EB8C26}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{55305CE3-E0BC-438A-9E85-A915CD0E9580}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55305CE3-E0BC-438A-9E85-A915CD0E9580}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55305CE3-E0BC-438A-9E85-A915CD0E9580}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3DA9A57C-0DA2-4520-8EB9-383536EB8C26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3DA9A57C-0DA2-4520-8EB9-383536EB8C26}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3DA9A57C-0DA2-4520-8EB9-383536EB8C26}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3DA9A57C-0DA2-4520-8EB9-383536EB8C26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
