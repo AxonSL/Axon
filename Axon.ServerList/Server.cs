@@ -16,9 +16,9 @@ public struct Server
     [JsonProperty("firendlyFire")] public bool FriendlyFire;                       //64
     [JsonProperty("players")] public int Players;                             //128
     [JsonProperty("maxPlayers")] public int MaxPlayers;                          //256
-    [JsonProperty("playerList")] public Dictionary<string, string> PlayerList;   //512
+    [JsonProperty("playerList")] public List<string> PlayerList;   //512
 
-    [JsonProperty("downloads")] public DownloadInfo Download;                //1024
+    [JsonProperty("mods")] public ModInfo[] Mods;                //1024
 
     [JsonProperty("ip")] public string Ip;
     [JsonProperty("port")] public ushort Port;

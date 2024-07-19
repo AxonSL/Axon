@@ -239,7 +239,7 @@ public static class AssetBundleSpawner
             GameObject = obj,
             Script = comp,
             Components = components,
-            RemovedComponents = [],
+            RemovedComponents = new(),
         };
         comp.SpawnedAsset = spawnedAsset;
         var list = new List<SpawnedAsset>(SpawnedAssets)

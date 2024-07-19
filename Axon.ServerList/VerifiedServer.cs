@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Axon.ServerList;
 
-public struct VerifiedServers
+public class VerifiedServers
 {
-    public string Token;
-    public Guid Identifier;
+    [JsonProperty("token")] public string Token = "";
+    [JsonProperty("identifier")] public Guid Identifier;
 
-    public string EMail;
-    public string Discord;
+    [JsonProperty("email")] public string EMail = "";
+    [JsonProperty("discord")] public string Discord = "";
 }

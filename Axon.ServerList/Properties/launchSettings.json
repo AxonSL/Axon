@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Axon.ServerList": {
+      "commandName": "Project",
+      "commandLineArgs": "-admintoken=debugToken"
+    }
+  }
+}

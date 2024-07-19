@@ -11,9 +11,7 @@ namespace Axon.Server.Patches.ExiledPatches;
 [HarmonyPatch]
 public class PlayerGetPatch
 {
-    [HarmonyPatch(typeof(Player), nameof(Player.Get), [
-        typeof(string)
-    ])]
+    [HarmonyPatch(typeof(Player), nameof(Player.Get),typeof(string))]
     public static bool Prefix(string args, ref Player __result)
     {
         try

@@ -1,9 +1,10 @@
-﻿namespace Axon.ServerList;
+﻿using Newtonsoft.Json;
+
+namespace Axon.ServerList;
 
 [Serializable]
-public class DownloadInfo
+public class ModInfo
 {
-    public string Name { get; set; }
-    public ulong Version { get; set; }
-    public string DownloadLink { get; set; }
+    [JsonProperty("name")] public string Name = "";
+    [JsonProperty("version")] public string Version = "";
 }

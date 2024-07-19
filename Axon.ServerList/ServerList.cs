@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
@@ -9,23 +11,46 @@ public class ServerList
 {
     public static Action<string> Log = Console.WriteLine;
 
-    private HttpListener _listener = new HttpListener();
-    private ConcurrentDictionary<string, DateTime> _ipTracker = new ConcurrentDictionary<string, DateTime>();
-    private readonly TimeSpan rateLimit = TimeSpan.FromSeconds(10);
+    private string[] _args = new string[0];
+    private string _adminToken = string.Empty;
+
+    private readonly HttpListener _listener = new HttpListener();
+    private readonly ConcurrentDictionary<string, DateTime> _ipTracker = new ConcurrentDictionary<string, DateTime>();
+    private readonly TimeSpan rateLimit = TimeSpan.FromSeconds(3);
 
     public ServerListConfiguration Configuration { get; set; }
     public List<ServerEntry> ServerEntries { get; set; } = new();
     public IEnumerable<Server> Servers => ServerEntries.Select(x => x.Server);
 
 
-    public ServerList(ServerListConfiguration configuration)
+    public ServerList(ServerListConfiguration configuration, string[] args)
     {
+        _args = args;
         Configuration = configuration;
         Start();
     }
 
     private void Start()
     {
+        var token = Environment.GetEnvironmentVariable("ADMINTOKEN");
+        if(token != null)
+        {
+            _adminToken = token;
+        }
+        else
+        {
+            var arg = _args.FirstOrDefault(x => x.StartsWith("-admintoken="));
+            var argToken = arg?.Split('=')[1];
+            if (!string.IsNullOrWhiteSpace(argToken))
+            {
+                _adminToken = argToken;
+            }
+            else
+            {
+                Console.WriteLine("No admin token found.\nPlease provide a Token otherwise the verification of servers are not possible");
+            }
+        }
+
         _listener.Prefixes.Add(Configuration.Url);
         _listener.Start();
 
@@ -38,7 +63,6 @@ public class ServerList
     {
         while(_listener.IsListening)
         {
-            Log("Check List");
             foreach(var server in ServerEntries.ToList())
             {
                 if((DateTime.Now - server.LastUpdate).TotalMinutes > 2)
@@ -74,7 +98,7 @@ public class ServerList
         if (IsRateLimited(context.Request.RemoteEndPoint.Address.ToString()))
         {
             response.StatusCode = 429;
-            response.StatusDescription = "Wait atleast 10 seconds";
+            response.StatusDescription = $"Wait atleast {rateLimit.TotalSeconds} seconds";
             goto finish;
         }
 
@@ -90,7 +114,7 @@ public class ServerList
                             responseBody = JsonConvert.SerializeObject(Servers);
                             break;
                         }
-                        catch (Exception ex)
+                        catch
                         {
                             response.StatusCode = 500;
                             response.StatusDescription = "Couldn't serialize server list";
@@ -180,10 +204,8 @@ public class ServerList
                                 if ((updateBit & 512) != 0)
                                     entry.Server.PlayerList = server.PlayerList;
 
-                                /*
                                 if ((updateBit & 1024) != 0)
-                                    entry.Server.Downloads = server.Downloads;
-                                */
+                                    entry.Server.Mods = server.Mods;
 
                                 response.StatusCode = 200;
                                 break;
@@ -207,6 +229,115 @@ public class ServerList
                     default:
                         response.StatusCode = 400;
                         response.StatusDescription = "You can only GET or POST on the server list";
+                        break;
+                }
+                break;
+
+            case "/admin":
+                var adminToken = request.QueryString["adminToken"];
+                if (string.IsNullOrWhiteSpace(adminToken))
+                {
+                    response.StatusCode = 401;
+                    response.StatusDescription = "You must provide a token";
+                    break;
+                }
+
+                if (adminToken != _adminToken)
+                {
+                    Log("Invalid Token: " + adminToken);
+                    response.StatusCode = 403;
+                    response.StatusDescription = "This token is not valid";
+                    break;
+                }
+
+                Console.WriteLine("Got valid admin request from endpoint: " + ip);
+
+                switch (request.HttpMethod)
+                {
+                    case "GET":
+                        try
+                        {
+                            response.StatusCode = 200;
+                            responseBody = JsonConvert.SerializeObject(Configuration.VerifiedServers);
+                            break;
+                        }
+                        catch
+                        {
+                            response.StatusCode = 500;
+                            response.StatusDescription = "Couldn't serialize verified Servers";
+                            break;
+                        }
+
+                    case "POST":
+                        try
+                        {
+                            var requestContent = JObject.Parse(requestBody);
+                            var discord = (string)(requestContent["discord"] ?? throw new NullReferenceException())!;
+                            var eMail = (string)(requestContent["email"] ?? throw new NullReferenceException())!;
+                            if (string.IsNullOrWhiteSpace(discord) || string.IsNullOrWhiteSpace(eMail))
+                                throw new NullReferenceException();
+
+                            var conf = Configuration;
+                            var list = conf.VerifiedServers.ToList();
+                            var entry = new VerifiedServers
+                            {
+                                Identifier = Guid.NewGuid(),
+                                Token = CreateToken(),
+                                Discord = discord,
+                                EMail = eMail,
+                            };
+                            list.Add(entry);
+                            conf.VerifiedServers = list.ToArray();
+                            Configuration = conf;
+                            File.WriteAllText(Programm.ConfigPath, JsonConvert.SerializeObject(conf));
+                            Console.WriteLine("New Server verified\nToken:" + entry.Token + "\nIdentifier:" + entry.Identifier+"\n");
+                            responseBody = JsonConvert.SerializeObject(entry);
+                            response.StatusCode = 201;
+                        }
+                        catch
+                        {
+                            response.StatusCode = 400;
+                            response.StatusDescription = "Couldn't deserialize body";
+                            break;
+                        }
+                        break;
+
+                    case "DELETE":
+                        try
+                        {
+                            var requestContent = JObject.Parse(requestBody);
+                            var identifier = requestContent["identifier"] ?? throw new NullReferenceException();
+                            var guid = Guid.Parse((string)identifier!);
+
+                            var config = Configuration;
+                            var list = config.VerifiedServers.ToList();
+                            var entry = list.FirstOrDefault(x => x.Identifier == guid);
+
+                            if(entry == null)
+                            {
+                                response.StatusCode = 404;
+                                response.StatusDescription = "No Server with that Identifier found";
+                                break;
+                            }
+
+                            list.Remove(entry);
+                            config.VerifiedServers = list.ToArray();
+                            File.WriteAllText(Programm.ConfigPath, JsonConvert.SerializeObject(config));
+                            Configuration = config;
+                            Console.WriteLine("Removed Server with identifier: " + identifier + "\n");
+                            response.StatusCode = 200;
+                        }
+                        catch
+                        {
+                            response.StatusCode = 400;
+                            response.StatusDescription = "Couldn't deserialize identifier";
+                            break;
+                        }
+                        break;
+
+                    default:
+                        response.StatusCode = 400;
+                        response.StatusDescription = "You can only Get,Post or Delete";
                         break;
                 }
                 break;
@@ -239,4 +370,12 @@ public class ServerList
         _ipTracker[clientIp] = now;
         return false;
     }
+
+    private static string CreateToken()
+    {
+        var random = new Random();
+        return new string(Enumerable.Repeat(_letters, 50).Select(x => x[random.Next(x.Length)]).ToArray());
+    }
+
+    private const string _letters = "abcdefghijklmopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 }
