@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axon.Client", "Axon.Client\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axon.Installer", "Axon.Installer\Axon.Installer.csproj", "{55305CE3-E0BC-438A-9E85-A915CD0E9580}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axon.ExampleClientMod", "Axon.ExampleClientMod\Axon.ExampleClientMod.csproj", "{C7D41714-78F0-4925-9C85-62B88E3E37F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{55305CE3-E0BC-438A-9E85-A915CD0E9580}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55305CE3-E0BC-438A-9E85-A915CD0E9580}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55305CE3-E0BC-438A-9E85-A915CD0E9580}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7D41714-78F0-4925-9C85-62B88E3E37F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7D41714-78F0-4925-9C85-62B88E3E37F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7D41714-78F0-4925-9C85-62B88E3E37F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7D41714-78F0-4925-9C85-62B88E3E37F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

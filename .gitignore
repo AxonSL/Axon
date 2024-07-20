@@ -605,6 +605,11 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-Axon.Client/Refs
-Axon.Server/Refs
-Axon.Installer/Refs
+Axon.Client/Refs/**/*
+!Axon.Client/Refs/**/*.md
+
+Axon.Server/Refs/**/*
+!Axon.Server/Refs/**/*.md
+
+Axon.Installer/Refs/**/*
+!Axon.Installer/Refs/**/*.md

@@ -118,7 +118,7 @@ public static class ServerListHandler
                     json += ",\"maxPlayers\": " + current.MaxPlayers;
                 }
 
-                if (_lastSend == null || _lastSend.PlayerList != current.PlayerList)
+                if (_lastSend == null || !_lastSend.PlayerList.Equals(current.PlayerList))
                 {
                     bits |= 512;
                     List<string> playerListJson = new List<string>();
@@ -129,7 +129,7 @@ public static class ServerListHandler
                     json += ",\"playerList\": [" + string.Join(",", playerListJson) + "]";
                 }
 
-                if (_lastSend == null || _lastSend.Mods != current.Mods)
+                if (_lastSend == null || !_lastSend.Mods.Equals(current.Mods))
                 {
                     bits |= 1024;
                     List<string> modsJson = new List<string>();

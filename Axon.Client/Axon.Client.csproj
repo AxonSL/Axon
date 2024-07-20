@@ -18,67 +18,64 @@
 
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>Refs\Assembly-CSharp.dll</HintPath>
+      <HintPath>Refs\Il2CppAssemblies\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>Refs\Assembly-CSharp-firstpass.dll</HintPath>
-    </Reference>
-    <Reference Include="BouncyCastle.Cryptography">
-      <HintPath>Refs\BouncyCastle.Cryptography.dll</HintPath>
+      <HintPath>Refs\Il2CppAssemblies\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppCommandSystem.Core">
-      <HintPath>Refs\Il2CppCommandSystem.Core.dll</HintPath>
+      <HintPath>Refs\Il2CppAssemblies\Il2CppCommandSystem.Core.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppInterop.Common">
-      <HintPath>Refs\Il2CppInterop.Common.dll</HintPath>
+      <HintPath>Refs\net6\Il2CppInterop.Common.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppInterop.Generator">
-      <HintPath>Refs\Il2CppInterop.Generator.dll</HintPath>
+      <HintPath>Refs\net6\Il2CppInterop.Generator.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppInterop.Runtime">
-      <HintPath>Refs\Il2CppInterop.Runtime.dll</HintPath>
+      <HintPath>Refs\net6\Il2CppInterop.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppMirror">
-      <HintPath>Refs\Il2CppMirror.dll</HintPath>
+      <HintPath>Refs\Il2CppAssemblies\Il2CppMirror.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppMirror.Components">
-      <HintPath>Refs\Il2CppMirror.Components.dll</HintPath>
+      <HintPath>Refs\Il2CppAssemblies\Il2CppMirror.Components.dll</HintPath>
     </Reference>
     <Reference Include="Il2Cppmscorlib">
-      <HintPath>Refs\Il2Cppmscorlib.dll</HintPath>
+      <HintPath>Refs\Il2CppAssemblies\Il2Cppmscorlib.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppNorthwoodLib">
-      <HintPath>Refs\Il2CppNorthwoodLib.dll</HintPath>
+      <HintPath>Refs\Il2CppAssemblies\Il2CppNorthwoodLib.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppPooling">
-      <HintPath>Refs\Il2CppPooling.dll</HintPath>
+      <HintPath>Refs\Il2CppAssemblies\Il2CppPooling.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppSystem">
-      <HintPath>Refs\Il2CppSystem.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>refs\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>Refs\Il2CppAssemblies\Il2CppSystem.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppSystem.Core">
-      <HintPath>Refs\Il2CppSystem.Core.dll</HintPath>
+      <HintPath>Refs\Il2CppAssemblies\Il2CppSystem.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>Refs\Il2CppAssemblies\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>Refs\UnityEngine.dll</HintPath>
+      <HintPath>Refs\Il2CppAssemblies\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>Refs\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>Refs\Il2CppAssemblies\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Il2CppAssetBundleManager">
-      <HintPath>refs\UnityEngine.Il2CppAssetBundleManager.dll</HintPath>
+      <HintPath>Refs\Managed\UnityEngine.Il2CppAssetBundleManager.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>Refs\UnityEngine.ImageConversionModule.dll</HintPath>
+      <HintPath>Refs\Il2CppAssemblies\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>Refs\UnityEngine.PhysicsModule.dll</HintPath>
+      <HintPath>Refs\Il2CppAssemblies\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>refs\UnityEngine.UI.dll</HintPath>
+      <HintPath>Refs\Il2CppAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
