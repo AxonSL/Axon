@@ -135,7 +135,7 @@
     <Compile Include="Patches\ServerList\CustomNetworkManagerCreateLobby.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NetworkMessages\AxonMessages\TestMessage.cs" />
-    <Compile Include="ServerList\DownloadInfo.cs" />
+    <Compile Include="ServerList\ModInfo.cs" />
     <Compile Include="ServerList\Server.cs" />
     <Compile Include="ServerList\ServerListHandler.cs" />
   </ItemGroup>

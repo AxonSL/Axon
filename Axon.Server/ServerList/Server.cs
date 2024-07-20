@@ -17,9 +17,9 @@ public class Server
     public bool FriendlyFire;                       //64
     public int Players;                             //128
     public int MaxPlayers;                          //256
-    public Dictionary<string, string> PlayerList;   //512
+    public string[] PlayerList;   //512
 
-    public DownloadInfo[] Downloads;                //1024
+    public ModInfo[] Mods;                //1024
 
     public string Ip;
     public ushort Port;
