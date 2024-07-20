@@ -1,0 +1,2 @@
+For the installer you only need System.Windows.Forms.dll.
+Most likely it will already be on your pc if you installed Windows forms with Visual Studios. Otherwise a quick google search should yield some results
